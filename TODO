@@ -1,0 +1,23 @@
+Video to audio and video stream separation - FRONTEND se karo - separation of 2 files also
+video stream to video analysis pathway 
+audio to whisper
+whisper evaluation method
+Database
+    * video with audio files
+
+Metric for grading
+recommendation system
+
+
+Schema
+
+ User Database
+Video, audio, Score, QID
+ Question Database
+QID, Question, Answer, Difficulty level, Max Score
+
+
+Spreadsheets
+ <LINKS TO SPREADSHEETS>
+
+
