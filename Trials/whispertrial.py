@@ -3,6 +3,7 @@ import cv2
 import wave
 import numpy as np
 import torchtext.data.metrics as metrics
+from torchtext.data import get_tokenizer
 
 
 def getVideo(videoFilePath,applyFunction):
@@ -27,20 +28,30 @@ def processVideo(videoArray):
 def useWhisper(audioFile):
     model = whisper.load_model("base")
     result = model.transcribe(audioFile,fp16=False)
-    print(result)
     return result['text']
 
 def getTextfromFile(filePath):
     with open(filePath) as f:
-        text = f.read().split(" .,\'\"")
-    return text
+        text = f.read()
+    return text.replace("\n"," ")
 
 def compareTexts(text1,text2):
-    #compare BLEU Score
-
-
+    tokenizer = get_tokenizer("basic_english")
+    text1 = tokenizer(text1) # , and other punctuation are to be removed # TODO
+    text2 = tokenizer(text2) 
+    print(text1)
+    print(text2)
+    print(metrics.bleu_score(text1,text2)) # needs same number of tokens for the two texts
 
 if __name__ == "__main__":
+    #getVideo("C:\\Users\\user\\Desktop\\video.mp4",processVideo)
+    audioFile = "D:\\fyp\\Multimodal_Online_Assessment\\Trials\\m1.wav"
+    textFile = "D:\\fyp\\Multimodal_Online_Assessment\\Trials\\m1.txt"
+    text1 = useWhisper(audioFile)
+    print(text1)
+    text2 = getTextfromFile(textFile)
+    print(text2)
+    compareTexts(text1,text2)
     
 
 
