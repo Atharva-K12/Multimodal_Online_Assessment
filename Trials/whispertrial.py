@@ -53,9 +53,3 @@ if __name__ == "__main__":
     print(text2)
     compareTexts(text1,text2)
     
-
-
-
-
-
-    
