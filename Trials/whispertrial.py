@@ -4,6 +4,7 @@ import wave
 import numpy as np
 import torchtext.data.metrics as metrics
 from torchtext.data import get_tokenizer
+import torch
 
 
 def getVideo(videoFilePath,applyFunction):
@@ -43,6 +44,14 @@ def compareTexts(text1,text2):
     print(text2)
     print(metrics.bleu_score(text1,text2)) # needs same number of tokens for the two texts
 
+def useRoberta(text1,text2):
+    roberta= torch.hub.load('pytorch/fairseq', 'roberta.large.mnli')
+    roberta.eval()  # disable dropout (or leave in train mode to finetune)
+    with torch.no_grad():
+    # Encode a pair of sentences and make a prediction
+        tokens = roberta.encode(text1, text2)
+        prediction = roberta.predict('mnli', tokens).argmax().item()
+        print(prediction)
 if __name__ == "__main__":
     #getVideo("C:\\Users\\user\\Desktop\\video.mp4",processVideo)
     audioFile = "D:\\fyp\\Multimodal_Online_Assessment\\Trials\\m1.wav"
@@ -51,5 +60,6 @@ if __name__ == "__main__":
     print(text1)
     text2 = getTextfromFile(textFile)
     print(text2)
-    compareTexts(text1,text2)
+    # compareTexts(text1,text2)
+    useRoberta(text1,text2)
     
