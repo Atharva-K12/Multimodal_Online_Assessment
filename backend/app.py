@@ -20,15 +20,18 @@ def upload_file():
         if file.filename == '':
             return "No selected file"
         if file:
+            # Saved file is mp4 file
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            # grade function to be called here
-            sentence_cosine_score = sentence_match(audioToText(app.config['AUDIO_FILE']),"ADD RETRIEVED TEXT HERE")
-            text_score = sentence_scoring_metric(sentence_cosine_score)
-            # Video analysis function to be called here
-            video_score = ADD_VIDEO_ANALYSIS_FUNCTION_HERE()
-            # Final score to be calculated here
-            final_score = ADD_FINAL_SCORE_FUNCTION_HERE(text_score,video_score)
+
+
+            # # grade function to be called here
+            # sentence_cosine_score = sentence_match(audioToText(app.config['AUDIO_FILE']),"ADD RETRIEVED TEXT HERE")
+            # text_score = sentence_scoring_metric(sentence_cosine_score)
+            # # Video analysis function to be called here
+            # video_score = ADD_VIDEO_ANALYSIS_FUNCTION_HERE()
+            # # Final score to be calculated here
+            # final_score = ADD_FINAL_SCORE_FUNCTION_HERE(text_score,video_score)
 
             # RETURN FINAL SCORE DATA AND OTHER ANALYSIS DATA 
             

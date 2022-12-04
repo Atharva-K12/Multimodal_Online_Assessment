@@ -10,9 +10,9 @@ import "./styles.css";
 
 const FromVideoRecorder = ({ push }) => {
 
-  const submitForm = (videoBlob) => {
+  const submitForm = (videoFile) => {
     const formData = new FormData();
-		formData.append('file', videoBlob);
+		formData.append('file', videoFile);
     fetch('http://localhost:5000/upload', {
       method: 'POST',
       body: formData
@@ -36,8 +36,12 @@ const FromVideoRecorder = ({ push }) => {
         }
       }}
       onRecordingComplete={(videoBlob) => {
-        submitForm(videoBlob);
-        console.log(videoBlob);
+        //  extract video in mp4 format from videoblob
+        const videoFile = new File([videoBlob], "video.mp4", {
+          type: "video/mp4"
+        });
+        submitForm(videoFile);
+        console.log("videoBlob", videoFile);
         push("/videoPreview", { videoBlob });
       }}
     />
