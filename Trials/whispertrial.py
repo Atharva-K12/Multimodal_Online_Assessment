@@ -54,12 +54,12 @@ def useRoberta(text1,text2):
         print(prediction)
 if __name__ == "__main__":
     #getVideo("C:\\Users\\user\\Desktop\\video.mp4",processVideo)
-    audioFile = "D:\\fyp\\Multimodal_Online_Assessment\\Trials\\m1.wav"
-    textFile = "D:\\fyp\\Multimodal_Online_Assessment\\Trials\\m1.txt"
+    audioFile = "D:\\fyp\\Multimodal_Online_Assessment\\Trials\\m1t.mp3"
+    # textFile = "D:\\fyp\\Multimodal_Online_Assessment\\Trials\\m1.txt"
     text1 = useWhisper(audioFile)
     print(text1)
-    text2 = getTextfromFile(textFile)
-    print(text2)
-    # compareTexts(text1,text2)
-    useRoberta(text1,text2)
+    # text2 = getTextfromFile(textFile)
+    # print(text2)
+    # # compareTexts(text1,text2)
+    # useRoberta(text1,text2)
     
