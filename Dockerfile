@@ -7,6 +7,7 @@ RUN apt install -y libsm6
 RUN apt install -y libxext6
 RUN apt install -y libxrender1
 RUN apt install -y libfontconfig1
+RUN apt install -y git
 RUN pip3 install --upgrade pip
 RUN pip3 install git+https://github.com/openai/whisper.git setuptools-rust
 RUN sudo apt update && sudo apt install ffmpeg
