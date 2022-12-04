@@ -14,9 +14,6 @@ RUN pip3 install opencv-python
 RUN pip3 install -U sentence-transformers
 RUN pip3 install flask
 RUN pip3 install flask_cors
-RUN git submodule add https://github.com/antoinelame/GazeTracking.git Models/GazeTracking
-RUN git submodule update --init --recursive
-RUN pip3 install -r Models/GazeTracking/requirements.txt
 
 # run the react app from frontend folder
 RUN cd frontend && npm install && npm start
