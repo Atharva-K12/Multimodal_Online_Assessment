@@ -15,6 +15,7 @@ RUN pip3 install opencv-python
 RUN pip3 install -U sentence-transformers
 RUN pip3 install flask
 RUN pip3 install flask_cors
+RUN pip3 install dlib
 
 # # run the react app from frontend folder
 # RUN cd frontend && npm install && npm start
