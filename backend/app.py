@@ -2,6 +2,7 @@ import os
 from flask import Flask, request
 from werkzeug.utils import secure_filename
 from flask_cors import CORS
+import moviepy.editor as mp
 from useWhisper import audioToText
 from sentenceMatch import sentence_match , sentence_scoring_metric
 
@@ -23,7 +24,8 @@ def upload_file():
             # Saved file is mp4 file
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-
+            video = mp.VideoFileClip(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            video.audio.write_audiofile(os.path.join(app.config['UPLOAD_FOLDER'], filename.split(".")[0] + ".wav"))
 
             # # grade function to be called here
             # sentence_cosine_score = sentence_match(audioToText(app.config['AUDIO_FILE']),"ADD RETRIEVED TEXT HERE")
