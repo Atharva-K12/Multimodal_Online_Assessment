@@ -5,9 +5,9 @@ from werkzeug.utils import secure_filename
 from flask_cors import CORS
 import moviepy.editor as mp
 import random
-# from useWhisper import audioToText
+from useWhisper import audioToText
 from pymongo import MongoClient
-# from sentenceMatch import sentence_match , sentence_scoring_metric
+from sentenceMatch import sentence_match , sentence_scoring_metric
 
 UPLOAD_FOLDER = './uploads'
 
@@ -27,11 +27,11 @@ def upload_file():
             # Saved file is mp4 file
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            video = mp.VideoFileClip(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            video.audio.write_audiofile(os.path.join(app.config['UPLOAD_FOLDER'], filename.split(".")[0] + ".wav"))
-
+            # video = mp.VideoFileClip(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            # video.audio.write_audiofile(os.path.join(app.config['UPLOAD_FOLDER'], filename.split(".")[0] + ".wav"))
             # # grade function to be called here
-            # sentence_cosine_score = sentence_match(audioToText(app.config['AUDIO_FILE']),"ADD RETRIEVED TEXT HERE")
+            app.config['FILE_PATH'] = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            sentence_cosine_score = sentence_match(audioToText(app.config['FILE_PATH']),"ADD RETRIEVED TEXT HERE")
             # text_score = sentence_scoring_metric(sentence_cosine_score)
             # # Video analysis function to be called here
             # video_score = ADD_VIDEO_ANALYSIS_FUNCTION_HERE()
