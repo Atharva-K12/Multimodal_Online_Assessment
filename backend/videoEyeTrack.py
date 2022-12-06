@@ -11,6 +11,7 @@ class VideoEyeTracker:
         self.videopath = videopath
         self.classify_stream = []
         self.number_of_frames = 0
+        self.threshold = 10
         self.eyeTrack()
         self.plagpercent=self.countPlagiarism()
         
