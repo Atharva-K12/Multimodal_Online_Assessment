@@ -1,10 +1,13 @@
 import os
+import bson.json_util as json_util
 from flask import Flask, request
 from werkzeug.utils import secure_filename
 from flask_cors import CORS
 import moviepy.editor as mp
-from useWhisper import audioToText
-from sentenceMatch import sentence_match , sentence_scoring_metric
+import random
+# from useWhisper import audioToText
+from pymongo import MongoClient
+# from sentenceMatch import sentence_match , sentence_scoring_metric
 
 UPLOAD_FOLDER = './uploads'
 
@@ -38,3 +41,13 @@ def upload_file():
             # RETURN FINAL SCORE DATA AND OTHER ANALYSIS DATA 
             
             return "File uploaded successfully"
+
+@app.route("/get-question", methods=['GET'])
+def get_question():
+    client = MongoClient("mongodb+srv://test:test12345@fypdb.11jbtg4.mongodb.net/?retryWrites=true&w=majority")
+    db = client.get_database('fyp')
+    records= db.questionBank
+    list_of_questions = list(records.find())
+    ret_question = random.choice(list_of_questions)
+    json_return_object = json_util.dumps(ret_question)
+    return json_return_object

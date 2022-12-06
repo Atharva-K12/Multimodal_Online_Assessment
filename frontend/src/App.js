@@ -4,11 +4,13 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Redirect
+  Redirect,
+  Link
 } from "react-router-dom";
 import "./styles.css";
+import Score from "./Score";
 
-const FromVideoRecorder = ({ push }) => {
+const FromVideoRecorder = ({ push, setQuestion }) => {
 
   const submitForm = (videoFile) => {
     const formData = new FormData();
@@ -21,11 +23,19 @@ const FromVideoRecorder = ({ push }) => {
     .catch(error => console.error('Error:', error))
   }
 
+  const getQuestion = () => {
+    fetch('http://127.0.0.1:5000/get-question')
+    .then(response => response.json())
+    .then(data => setQuestion(data))
+    .catch(error => console.error('Error:', error))
+  }
+
   return (
     <VideoRecorder
       isFlipped={false}
       countdownTime={0}
       mimeType="video/webm;codecs=vp8,opus"
+      onStartRecording={() => getQuestion()}
       constraints={{
         audio: true,
         video: {
@@ -49,11 +59,15 @@ const FromVideoRecorder = ({ push }) => {
 };
 
 const VideoRecordPage = (props) => {
+
+  const [question, setQuestion] = React.useState({});
   return (
+
     <div className="App">
       <h1>Video record</h1>
+      <p>{question?.question}</p>
       <div style={{ width: "100%", maxWidth: 480, height: 640 }}>
-        <FromVideoRecorder push={props.history.push} />
+        <FromVideoRecorder push={props.history.push} setQuestion={setQuestion} />
       </div>
     </div>
   );
@@ -76,6 +90,7 @@ const VideoPreviewPage = (props) => {
           />
         </div>
       )}
+      <Link to="/score">View Score</Link>
     </div>
   );
 };
@@ -87,6 +102,7 @@ export default function App() {
         <Redirect to="/videoRecord" exact path="/" />
         <Route path="/videoRecord" component={VideoRecordPage} />
         <Route path="/videoPreview" component={VideoPreviewPage} />
+        <Route path="/score" component={Score} />
       </Switch>
     </Router>
   );
