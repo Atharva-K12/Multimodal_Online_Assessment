@@ -39,8 +39,8 @@ const FromVideoRecorder = ({ push, setQuestion }) => {
       constraints={{
         audio: true,
         video: {
-          width: { exact: 480, ideal: 480 },
-          height: { exact: 640, ideal: 640 },
+          width: { exact: 500, ideal: 480 },
+          height: { exact: 500, ideal: 640 },
           aspectRatio: { exact: 0.7500000001, ideal: 0.7500000001 },
           resizeMode: "crop-and-scale"
         }
@@ -64,9 +64,9 @@ const VideoRecordPage = (props) => {
   return (
 
     <div className="App">
-      <h1>Video record</h1>
+      <h3>Record Your Video</h3>
       <p>{question?.question}</p>
-      <div style={{ width: "100%", maxWidth: 480, height: 640 }}>
+      <div style={{ width: "100%", maxWidth: 1000, height: 500 , margin: "auto"}}>
         <FromVideoRecorder push={props.history.push} setQuestion={setQuestion} />
       </div>
     </div>
@@ -76,21 +76,20 @@ const VideoRecordPage = (props) => {
 const VideoPreviewPage = (props) => {
   return (
     <div className="App">
-      <h1>Video preview</h1>
-
+      <h3>Video Preview</h3>
       {props.location.state && props.location.state.videoBlob && (
-        <div style={{ width: "100%", maxWidth: 480, height: 640 }}>
+        <div style={{ width: "100%", maxWidth: 480, height: 400, margin:"auto" }}>
           <video
             src={window.URL.createObjectURL(props.location.state.videoBlob)}
             width={480}
-            height={640}
+            height={400}
             autoPlay
             loop
             controls
           />
         </div>
       )}
-      <Link to="/score">View Score</Link>
+      <Link className="btn m-3 btn-sm btn-primary" to="/score">View Score</Link>
     </div>
   );
 };

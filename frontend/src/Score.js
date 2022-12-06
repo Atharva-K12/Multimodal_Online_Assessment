@@ -4,7 +4,7 @@ import './score.css'
 
 function Score() {
   return (
-    <div>
+    <div className='m-3'>
         <h1>Score Obtained</h1>
         <table className='scoreTable'>
             <tr>
@@ -18,7 +18,7 @@ function Score() {
                 <td>0.5</td>
             </tr>
         </table>
-        <Link to='/VideoRecord'>Next Question</Link>
+        <Link className="btn m-3 btn-sm btn-primary" to='/VideoRecord'>Next Question</Link>
     </div>
   )
 }
