@@ -21,11 +21,21 @@ const FromVideoRecorder = ({ push }) => {
     .catch(error => console.error('Error:', error))
   }
 
+  const [question, setQuestion] = React.useState({});
+
+  const getQuestion = () => {
+    fetch('http://127.0.0.1:5000/get-question')
+    .then(response => response.json())
+    .then(data => setQuestion(data))
+    .catch(error => console.error('Error:', error))
+  }
+
   return (
     <VideoRecorder
       isFlipped={false}
       countdownTime={0}
       mimeType="video/webm;codecs=vp8,opus"
+      onStartRecording={() => getQuestion()}
       constraints={{
         audio: true,
         video: {
@@ -49,6 +59,7 @@ const FromVideoRecorder = ({ push }) => {
 };
 
 const VideoRecordPage = (props) => {
+
   return (
     <div className="App">
       <h1>Video record</h1>
