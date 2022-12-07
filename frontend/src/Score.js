@@ -13,9 +13,9 @@ function Score() {
                 <th>Aggregate Score</th>
             </tr>
             <tr>
-                <td>{localStorage.getItem('score')}</td>
                 <td>{localStorage.getItem('text_score')}</td>
                 <td>{localStorage.getItem('video_score')}</td>
+                <td>{localStorage.getItem('score')}</td>
             </tr>
         </table>
         <Link className="btn m-3 btn-sm btn-primary" to='/VideoRecord'>Next Question</Link>
