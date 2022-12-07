@@ -10,7 +10,7 @@ import {
 import "./styles.css";
 import Score from "./Score";
 
-const FromVideoRecorder = ({ push, setQuestion, getQue }) => {
+const FromVideoRecorder = ({ push, setQuestion, getQue, setScore }) => {
 
   const submitForm = (videoFile) => {
     const formData = new FormData();
@@ -21,6 +21,7 @@ const FromVideoRecorder = ({ push, setQuestion, getQue }) => {
       body: formData
     })
     .then(response => response.json())
+    .then(data => setScore(data))
     .catch(error => console.error('Error:', error))
   }
 
@@ -60,8 +61,8 @@ const FromVideoRecorder = ({ push, setQuestion, getQue }) => {
 };
 
 const VideoRecordPage = (props) => {
-
   const [question, setQuestion] = React.useState({});
+  const [score, setScore] = React.useState({})
   function getQuestion(){
     return question.question;
   }
@@ -72,7 +73,7 @@ const VideoRecordPage = (props) => {
       <h3>Record Your Video</h3>
       <p>{question?.question}</p>
       <div style={{ width: "100%", maxWidth: 1000, height: 500 , margin: "auto"}}>
-        <FromVideoRecorder push={props.history.push} setQuestion={setQuestion} getQue = {getQuestion} />
+        <FromVideoRecorder push={props.history.push} setQuestion={setQuestion} getQue = {getQuestion} setScore={setScore} />
       </div>
     </div>
   );
