@@ -10,11 +10,12 @@ import {
 import "./styles.css";
 import Score from "./Score";
 
-const FromVideoRecorder = ({ push, setQuestion }) => {
+const FromVideoRecorder = ({ push, setQuestion, getID }) => {
 
   const submitForm = (videoFile) => {
     const formData = new FormData();
 		formData.append('file', videoFile);
+    formData.append('qid', getID());
     fetch('http://localhost:5000/upload', {
       method: 'POST',
       body: formData
@@ -61,13 +62,17 @@ const FromVideoRecorder = ({ push, setQuestion }) => {
 const VideoRecordPage = (props) => {
 
   const [question, setQuestion] = React.useState({});
+  function getQuestionID(){
+    return question.question_id;
+  }
+
   return (
 
     <div className="App">
       <h3>Record Your Video</h3>
       <p>{question?.question}</p>
       <div style={{ width: "100%", maxWidth: 1000, height: 500 , margin: "auto"}}>
-        <FromVideoRecorder push={props.history.push} setQuestion={setQuestion} />
+        <FromVideoRecorder push={props.history.push} setQuestion={setQuestion} getID = {getQuestionID} />
       </div>
     </div>
   );
