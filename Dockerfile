@@ -1,5 +1,6 @@
 FROM ubuntu:latest
 RUN apt-get update
+COPY . /app
 RUN apt install -y python3
 RUN apt install -y python3-pip
 RUN apt install -y cmake
@@ -17,6 +18,10 @@ RUN pip3 install flask
 RUN pip3 install flask_cors
 RUN pip3 install dlib
 
+WORKDIR /app
+RUN cd frontend 
+
+# RUN ls
 # # run the react app from frontend folder
 # RUN cd frontend && npm install && npm start
 # # run the flask app from backend folder
