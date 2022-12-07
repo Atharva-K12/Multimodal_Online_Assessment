@@ -18,6 +18,9 @@ RUN pip3 install flask
 RUN pip3 install flask_cors
 RUN pip3 install dlib
 
+WORKDIR /app
+RUN cd frontend 
+
 # RUN ls
 # # run the react app from frontend folder
 # RUN cd frontend && npm install && npm start
