@@ -9,6 +9,7 @@ from useWhisper import audioToText
 from videoEyeTrack import VideoEyeTracker
 from pymongo import MongoClient
 from sentenceMatch import sentence_match , sentence_scoring_metric
+from videoEyeTrack import VideoEyeTracker
 
 UPLOAD_FOLDER = './uploads'
 
@@ -44,9 +45,9 @@ def upload_file():
             app.config['FILE_PATH'] = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             sentence_cosine_score = sentence_match(audioToText(app.config['FILE_PATH']),answer)
             text_score = sentence_scoring_metric(sentence_cosine_score)
-            # Video analysis function to be called here
-            video_score = VideoEyeTracker(app.config['FILE_PATH'])
-            # Final score to be calculated here
+            # # Video analysis function to be called here
+            video_score = VideoEyeTracker(app.config['FILE_PATH']).plagpercent
+            # # Final score to be calculated here
             # final_score = ADD_FINAL_SCORE_FUNCTION_HERE(text_score,video_score)
 
             # RETURN FINAL SCORE DATA AND OTHER ANALYSIS DATA 
