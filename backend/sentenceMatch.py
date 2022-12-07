@@ -9,4 +9,5 @@ def sentence_match(sentence1, sentence2):
     return cosine_scores.item()
 
 def sentence_scoring_metric(cosine_value):
-    return cosine_value>0.8
+    print(cosine_value)
+    return cosine_value
