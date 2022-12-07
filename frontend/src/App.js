@@ -62,18 +62,16 @@ const FromVideoRecorder = ({ push, setQuestion, getQue, setScore }) => {
 
 const VideoRecordPage = (props) => {
   const [question, setQuestion] = React.useState({});
-  const [score, setScore] = React.useState({})
   function getQuestion(){
     return question.question;
   }
 
   return (
-
     <div className="App">
       <h3>Record Your Video</h3>
       <p>{question?.question}</p>
       <div style={{ width: "100%", maxWidth: 1000, height: 500 , margin: "auto"}}>
-        <FromVideoRecorder push={props.history.push} setQuestion={setQuestion} getQue = {getQuestion} setScore={setScore} />
+        <FromVideoRecorder push={props.history.push} setQuestion={setQuestion} getQue = {getQuestion} setScore={props.setScore} />
       </div>
     </div>
   );
@@ -101,13 +99,14 @@ const VideoPreviewPage = (props) => {
 };
 
 export default function App() {
+  const [score, setScore] = React.useState({})
   return (
     <Router>
       <Switch>
         <Redirect to="/videoRecord" exact path="/" />
-        <Route path="/videoRecord" component={VideoRecordPage} />
+        <Route path="/videoRecord" component={VideoRecordPage} setScore = {setScore} />
         <Route path="/videoPreview" component={VideoPreviewPage} />
-        <Route path="/score" component={Score} />
+        <Route path="/score" component={Score} props = {Score = score} />
       </Switch>
     </Router>
   );
