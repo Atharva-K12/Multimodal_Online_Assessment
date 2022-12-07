@@ -10,7 +10,7 @@ import {
 import "./styles.css";
 import Score from "./Score";
 
-const FromVideoRecorder = ({ push, setQuestion, getQue, setScore }) => {
+const FromVideoRecorder = ({ push, setQuestion, getQue}) => {
 
   const submitForm = (videoFile) => {
     const formData = new FormData();
@@ -21,7 +21,12 @@ const FromVideoRecorder = ({ push, setQuestion, getQue, setScore }) => {
       body: formData
     })
     .then(response => response.json())
-    .then(data => setScore(data))
+    .then(data => {
+      console.log(data);
+      localStorage.setItem('score', data['score']);
+      localStorage.setItem('text_score', data['text_score']);
+      localStorage.setItem('video_score', data['video_score']);
+      })
     .catch(error => console.error('Error:', error))
   }
 
@@ -71,7 +76,7 @@ const VideoRecordPage = (props) => {
       <h3>Record Your Video</h3>
       <p>{question?.question}</p>
       <div style={{ width: "100%", maxWidth: 1000, height: 500 , margin: "auto"}}>
-        <FromVideoRecorder push={props.history.push} setQuestion={setQuestion} getQue = {getQuestion} setScore={props.setScore} />
+        <FromVideoRecorder push={props.history.push} setQuestion={setQuestion} getQue = {getQuestion} />
       </div>
     </div>
   );
@@ -99,14 +104,13 @@ const VideoPreviewPage = (props) => {
 };
 
 export default function App() {
-  const [score, setScore] = React.useState({})
   return (
     <Router>
       <Switch>
         <Redirect to="/videoRecord" exact path="/" />
-        <Route path="/videoRecord" component={VideoRecordPage} setScore = {setScore} />
+        <Route path="/videoRecord" component={VideoRecordPage} />
         <Route path="/videoPreview" component={VideoPreviewPage} />
-        <Route path="/score" component={Score} Score = {score} />
+        <Route path="/score" component={Score} />
       </Switch>
     </Router>
   );

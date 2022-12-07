@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import './score.css'
 
-function Score(props) {
+function Score() {
   return (
     <div className='m-3'>
         <h1>Score Obtained</h1>
@@ -13,9 +13,9 @@ function Score(props) {
                 <th>Aggregate Score</th>
             </tr>
             <tr>
-                <td>{props.Score.text_score}</td>
-                <td>{props.Score.video_score}</td>
-                <td>{props.Score.score}</td>
+                <td>{localStorage.getItem('score')}</td>
+                <td>{localStorage.getItem('text_score')}</td>
+                <td>{localStorage.getItem('video_score')}</td>
             </tr>
         </table>
         <Link className="btn m-3 btn-sm btn-primary" to='/VideoRecord'>Next Question</Link>
