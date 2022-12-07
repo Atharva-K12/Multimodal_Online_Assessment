@@ -106,7 +106,7 @@ export default function App() {
         <Redirect to="/videoRecord" exact path="/" />
         <Route path="/videoRecord" component={VideoRecordPage} setScore = {setScore} />
         <Route path="/videoPreview" component={VideoPreviewPage} />
-        <Route path="/score" component={Score} props = {Score = score} />
+        <Route path="/score" component={Score} Score = {score} />
       </Switch>
     </Router>
   );
