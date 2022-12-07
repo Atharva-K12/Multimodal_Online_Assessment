@@ -60,7 +60,8 @@ def upload_file():
             q.asked_questions.append({'Question':question[0], 'Score' :final_score})
             score = {"score":final_score,"text_score":text_score, "video_score":video_score}
             
-            return score
+            json_return_score = json_util.dumps(score)
+            return json_return_score
             
 @app.route("/get-question", methods=['GET'])
 def get_question():
