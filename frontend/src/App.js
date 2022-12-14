@@ -9,6 +9,8 @@ import {
 } from "react-router-dom";
 import "./styles.css";
 import Score from "./Score";
+import Login from "./Login";
+import Register from "./Register";
 
 const FromVideoRecorder = ({ push, setQuestion, getQue}) => {
 
@@ -110,6 +112,8 @@ export default function App() {
         <Redirect to="/videoRecord" exact path="/" />
         <Route path="/videoRecord" component={VideoRecordPage} />
         <Route path="/videoPreview" component={VideoPreviewPage} />
+        <Route path="/login" component={Login} />
+        <Route path="/register" component={Register} />
         <Route path="/score" component={Score} />
       </Switch>
     </Router>
