@@ -1,6 +1,7 @@
 import os
 import bson.json_util as json_util
 import bcrypt
+from functools import wraps
 from flask import Flask, request, session, make_response, jsonify
 from werkzeug.utils import secure_filename
 from flask_cors import CORS
@@ -56,8 +57,8 @@ def Login():
         if user:
             if bcrypt.hashpw(password.encode('utf-8'), user['password'].encode('utf-8')) == user['password'].encode('utf-8'):
                 session['username'] = username
-                token = jwt.encode({'pubic_id':user['public_id']}, app.config['SECRET_KEY'])
-                return make_response(jsonify({'token':token.decode('UTF-8')}), 200)
+                token = jwt.encode({'public_id':user['public_id']}, app.config['SECRET_KEY'])
+                return make_response(jsonify({'token':token}), 200)
             else:
                 return "Incorrect password"
         else:   
@@ -122,3 +123,24 @@ def get_question():
     print(ret_question)
     json_return_object = json_util.dumps(ret_question)
     return json_return_object
+
+
+def token_validation(func):
+    @wraps(func)
+    def validate(*args, **kwargs):
+        token = None
+        if 'x-access-token' in request.headers:
+            token = request.headers['x-access-token']
+        if not token:
+            return jsonify({'message':'Token is missing'}), 401
+
+        try:
+            data = jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])
+            current_user = db.users.find_one({'public_id':data['public_id']})
+            if not current_user:
+                return jsonify({'message':'Token is invalid'}), 401
+        except:
+            return jsonify({'message':'Token is invalid'}), 401
+        return func(current_user, *args, **kwargs)
+    
+    return validate
