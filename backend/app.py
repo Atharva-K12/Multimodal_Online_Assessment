@@ -1,10 +1,11 @@
 import os
 import bson.json_util as json_util
-from flask import Flask, request
+import bcrypt
+from flask import Flask, request, session, make_response, jsonify
 from werkzeug.utils import secure_filename
 from flask_cors import CORS
 import moviepy.editor as mp
-import random
+import jwt
 from useWhisper import audioToText
 # from videoEyeTrack import VideoEyeTracker
 from pymongo import MongoClient
@@ -17,12 +18,57 @@ UPLOAD_FOLDER = './uploads'
 app = Flask(__name__)
 CORS(app)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+# Secret key to be decided
+app.config['SECRET_KEY'] = 'secret key'
 
 client = MongoClient("mongodb+srv://test:test12345@fypdb.11jbtg4.mongodb.net/?retryWrites=true&w=majority")
 db = client.get_database('fyp')
 records= db.questionBank
 list_of_questions = list(records.find())
 q = Question(list_of_questions)
+
+@app.route("/SignUp", methods=['POST'])
+def SignUp():
+    # Check whether username exists in db
+    # If exists, return error
+    # Else, add user to db
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        user = db.users.find_one({'username':username})
+        if user:
+            return "Username already exists"
+        else:
+            hashed = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+            db.users.insert_one({'username':username,'password':hashed,'email':request.form['email']})
+            return "User created"
+
+
+@app.route("/Login", methods=['POST'])
+def Login():
+    # Check whether username exists in db
+    # If exists, check password
+    # Else, return error
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        user = db.users.find_one({'username':username})
+        if user:
+            if bcrypt.hashpw(password.encode('utf-8'), user['password'].encode('utf-8')) == user['password'].encode('utf-8'):
+                session['username'] = username
+                token = jwt.encode({'pubic_id':user['public_id']}, app.config['SECRET_KEY'])
+                return make_response(jsonify({'token':token.decode('UTF-8')}), 200)
+            else:
+                return "Incorrect password"
+        else:   
+            return "Username does not exist"
+
+
+@app.route("/Logout", methods=['GET'])
+def Logout():
+    session.pop('username', None)
+    return "Logout successful"
+
 
 @app.route("/upload", methods=['POST'])
 def upload_file():
