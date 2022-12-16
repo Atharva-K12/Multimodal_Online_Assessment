@@ -144,3 +144,44 @@ def token_validation(func):
         return func(current_user, *args, **kwargs)
     
     return validate
+
+# Multi user support
+@app.route("/upload", methods=['POST'])
+@token_validation
+def upload_file(current_user):
+    if request.method == 'POST':
+        if 'file' not in request.files:
+            return "No file part"
+        file = request.files['file']
+        if file.filename == '':
+            return "No selected file"
+        if file:
+            # Saved file is mp4 file
+            username = current_user['username']
+            qid = request.form['qid']
+            filename = username + qid + ".mp4"
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            # video = mp.VideoFileClip(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            # video.audio.write_audiofile(os.path.join(app.config['UPLOAD_FOLDER'], filename.split(".")[0] + ".wav"))
+
+            #client = MongoClient("mongodb+srv://test:test12345@fypdb.11jbtg4.mongodb.net/?retryWrites=true&w=majority")
+            #db = client.get_database('fyp')
+            #records= db.questionBank
+            question = request.form['question']
+            question = records.find({"question":question})
+            answer = json_util.dumps(question[0]["answer"])
+
+            # Audio to text conversion and sentence matching
+            app.config['FILE_PATH'] = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            sentence_cosine_score = sentence_match(audioToText(app.config['FILE_PATH']),answer)
+            text_score = sentence_scoring_metric(sentence_cosine_score)
+            # # Video analysis function to be called here
+            video_score = 0
+            # video_score = VideoEyeTracker(app.config['FILE_PATH']).plagpercent
+            # Final score to be calculated here
+            final_score = scoring_criteria(text_score,video_score)
+            q.asked_questions.append({'Question':question[0], 'Score' :final_score})
+            score = {"score":final_score,"text_score":text_score, "video_score":video_score}
+            
+            json_return_score = json_util.dumps(score)
+            return json_return_score
