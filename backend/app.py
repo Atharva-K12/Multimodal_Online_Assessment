@@ -64,9 +64,30 @@ def Login():
         else:   
             return "Username does not exist"
 
+def token_validation(func):
+    @wraps(func)
+    def validate(*args, **kwargs):
+        token = None
+        if 'x-access-token' in request.headers:
+            token = request.headers['x-access-token']
+        if not token:
+            return jsonify({'message':'Token is missing'}), 401
+
+        try:
+            data = jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])
+            current_user = db.users.find_one({'public_id':data['public_id']})
+            if not current_user:
+                return jsonify({'message':'Token is invalid'}), 401
+        except:
+            return jsonify({'message':'Token is invalid'}), 401
+        return func(current_user, *args, **kwargs)
+    
+    return validate
+
 
 @app.route("/Logout", methods=['GET'])
-def Logout():
+@token_validation
+def Logout(current_user):
     session.pop('username', None)
     return "Logout successful"
 
@@ -125,26 +146,6 @@ def get_question():
     return json_return_object
 
 
-def token_validation(func):
-    @wraps(func)
-    def validate(*args, **kwargs):
-        token = None
-        if 'x-access-token' in request.headers:
-            token = request.headers['x-access-token']
-        if not token:
-            return jsonify({'message':'Token is missing'}), 401
-
-        try:
-            data = jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])
-            current_user = db.users.find_one({'public_id':data['public_id']})
-            if not current_user:
-                return jsonify({'message':'Token is invalid'}), 401
-        except:
-            return jsonify({'message':'Token is invalid'}), 401
-        return func(current_user, *args, **kwargs)
-    
-    return validate
-
 # Multi user support
 @app.route("/upload", methods=['POST'])
 @token_validation
@@ -159,7 +160,7 @@ def upload_file(current_user):
             # Saved file is mp4 file
             username = current_user['username']
             qid = request.form['qid']
-            filename = username + qid + ".mp4"
+            filename = username + qid + ".mp3"
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             # video = mp.VideoFileClip(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             # video.audio.write_audiofile(os.path.join(app.config['UPLOAD_FOLDER'], filename.split(".")[0] + ".wav"))
@@ -185,3 +186,22 @@ def upload_file(current_user):
             
             json_return_score = json_util.dumps(score)
             return json_return_score
+
+
+# Video file upload
+@app.route("/videoFile", methods = ['POST'])
+@token_validation
+def upload_video(current_user):
+    if request.method == 'POST':
+        if 'video-file' not in request.files:
+            return "No file part"
+        file = request.files['video-file']
+        if file.filename == '':
+            return "No selected file"
+        if file:
+            # Saved file is mp4 file
+            username = current_user['username']
+            qid = request.form['qid']
+            filename = username + ".mp4"
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            return "File uploaded successfully"
