@@ -40,3 +40,14 @@ decide score metric Atharva with API calls
 connect to FRONTEND Meet
 Eye tracking in video **if completed by then**
 recommendation system Kalyani 
+
+
+
+22/12/2022
+
+Redis for database caching, Backgroud Video file at end of test : Meet
+Recommendation system : Sahil
+User dashboard, loading page after each question, scoring page -> loading page before it : Sahil
+
+User schema : Username, password, email, courses/test
+
