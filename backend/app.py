@@ -14,15 +14,17 @@ from recommender1 import Question
 from flask_redis import FlaskRedis
 
 UPLOAD_FOLDER = './uploads'
-REDIS_URL = 'redis://localhost:6379'
+REDIS_URL = 'redis://localhost:6379/0'
 
 app = Flask(__name__)
-redis_client = FlaskRedis(app)
 CORS(app)
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 # Secret key to be decided
 app.config['SECRET_KEY'] = 'secret key'
+app.config['REDIS_URL'] = REDIS_URL
+
+redis_client = FlaskRedis(app)
 
 client = MongoClient("mongodb+srv://test:test12345@fypdb.11jbtg4.mongodb.net/?retryWrites=true&w=majority")
 db = client.get_database('fyp')
