@@ -4,18 +4,20 @@ import bcrypt
 from flask import Flask, request, session, make_response, jsonify
 from flask_cors import CORS
 import jwt
+from functools import wraps
 from useWhisper import audioToText
 # from videoEyeTrack import VideoEyeTracker
 from pymongo import MongoClient
 from sentenceMatch import sentence_match , sentence_scoring_metric
 from score import scoring_criteria
 from recommender1 import Question
-from middleware import token_validation
 
 UPLOAD_FOLDER = './uploads'
 
 app = Flask(__name__)
 CORS(app)
+
+
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 # Secret key to be decided
 app.config['SECRET_KEY'] = 'secret key'
@@ -25,6 +27,30 @@ db = client.get_database('fyp')
 records= db.questionBank
 list_of_questions = list(records.find())
 q = Question(list_of_questions)
+
+####################### Middle-ware functions ############################
+
+def token_validation(func):
+    @wraps(func)
+    def validate(*args, **kwargs):
+        token = None
+        if 'x-access-token' in request.headers:
+            token = request.headers['x-access-token']
+        if not token:
+            return jsonify({'message':'Token is missing'}), 401
+
+        try:
+            data = jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])
+            current_user = db.users.find_one({'public_id':data['public_id']})
+            if not current_user:
+                return jsonify({'message':'Token is invalid'}), 401
+        except:
+            return jsonify({'message':'Token is invalid'}), 401
+        return func(current_user, *args, **kwargs)
+    
+    return validate
+
+################################################################################
 
 @app.route("/SignUp", methods=['POST'])
 def SignUp():
