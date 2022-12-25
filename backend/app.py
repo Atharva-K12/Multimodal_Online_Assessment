@@ -11,12 +11,14 @@ from pymongo import MongoClient
 from sentenceMatch import sentence_match , sentence_scoring_metric
 from score import scoring_criteria
 from recommender1 import Question
+from flask_redis import FlaskRedis
 
 UPLOAD_FOLDER = './uploads'
+REDIS_URL = 'redis://localhost:6379'
 
 app = Flask(__name__)
+redis_client = FlaskRedis(app)
 CORS(app)
-
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 # Secret key to be decided
@@ -28,7 +30,7 @@ records= db.questionBank
 list_of_questions = list(records.find())
 q = Question(list_of_questions)
 
-####################### Middle-ware functions ############################
+############################ Middleware functions ################################
 
 def token_validation(func):
     @wraps(func)
@@ -50,9 +52,9 @@ def token_validation(func):
     
     return validate
 
-################################################################################
+####################################################################################
 
-@app.route("/SignUp", methods=['POST'])
+@app.route("/sign_up", methods=['POST'])
 def SignUp():
     # Check whether username exists in db
     # If exists, return error
@@ -69,7 +71,7 @@ def SignUp():
             return "User created"
 
 
-@app.route("/Login", methods=['POST'])
+@app.route("/login", methods=['POST'])
 def Login():
     # Check whether username exists in db
     # If exists, check password
@@ -89,14 +91,14 @@ def Login():
             return "Username does not exist"
 
 
-@app.route("/Logout", methods=['GET'])
+@app.route("/logout", methods=['GET'])
 @token_validation
 def Logout(current_user):
     session.pop('username', None)
     return "Logout successful"
 
             
-@app.route("/get-question", methods=['GET'])
+@app.route("/get_question", methods=['GET'])
 def get_question():
     # client = MongoClient("mongodb+srv://test:test12345@fypdb.11jbtg4.mongodb.net/?retryWrites=true&w=majority")
     # db = client.get_database('fyp')
@@ -154,7 +156,7 @@ def upload_file(current_user):
 
 
 # Video file upload
-@app.route("/videoFile", methods = ['POST'])
+@app.route("/video_file", methods = ['POST'])
 @token_validation
 def upload_video(current_user):
     if request.method == 'POST':
