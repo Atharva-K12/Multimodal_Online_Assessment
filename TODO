@@ -51,3 +51,11 @@ User dashboard, loading page after each question, scoring page -> loading page b
 
 User schema : Username, password, email, courses/test
 
+
+29/12/2022
+
+Multiple user types (login, dashboard, course creation and its mangement) i.e. student, teacher, admin -> Sahil
+Recommendation system (offline vectorization, clusterization, API for reclusterization, addition of question) -> Atharva
+Video analysis, database creation for video -> Kalyani
+
+Scoring metric (research papers) -> common for all
