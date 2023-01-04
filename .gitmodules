@@ -1,3 +1,0 @@
-[submodule "Models/gazeTracker"]
-	path = Models/gazeTracker
-	url = https://github.com/antoinelame/GazeTracking.git
