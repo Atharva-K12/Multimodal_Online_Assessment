@@ -147,3 +147,48 @@ class  RecommenderCluster:
             distances.append({'question':vectorized_question['question'], 'distance':distance})
         distances.sort(key=lambda x: x['distance'])
         return distances[len(distances)//2]
+
+
+class Recommender:
+
+    def __init__(self, question_list, threshold=0.5):
+        self.question_list = question_list
+        self.vectorized_questions = Vectorize_Questions(self.question_list).vectorized_questions
+        self.distance_metric = self.euclidean_distance
+        self.threshold = threshold
+
+    def vectorize(self, question):
+        return sentence_encoding(question)
+    
+    def clusterize(self):
+        # assign same id to questions with distance less than threshold
+        clusters = []
+        for question in self.vectorized_questions:
+            if len(clusters) == 0:
+                clusters.append([question])
+            else:
+                for cluster in clusters:
+                    if self.distance_metric(cluster[0]['vector'], question['vector']) < self.threshold:
+                        cluster.append(question)
+                else:
+                    clusters.append([question])
+        self.clusters = clusters
+    
+    def distance_metric(self, vector1, vector2):
+        return np.linalg.norm(vector1 - vector2)
+
+class QuestionHandler:
+    def __init__(self,questionsDB=None):
+        if questionsDB is None:
+            self.questions = []
+        else:
+            self.questions = questionsDB
+        
+
+    def add_question(self, question):
+        self.questions.append(Vectorize_Questions([question]))
+    
+    
+    
+
+        

@@ -1,0 +1,39 @@
+Aprroach 1: Fixed Size Clusters
+
+Question Bank
+    [
+        id
+        question
+        answer
+        vector
+    ]
+
+cluster
+    [
+        id
+        question id question_list
+        median 0th index question
+    ]
+
+
+Approach 2: Using K-Means
+
+Question Bank
+    [
+        id
+        question
+        answer
+        vector
+        [
+            id of closest question
+        ]
+    ]
+
+
+Approach 3: THINK
+
+Points to consider
+1) If threshold is small, cluster size will be small and one question can be present in multiple clusters
+    for an answer, check distance of median for clusters on which question is present -> based on distance select a cluster and return next question from that cluster.0th
+
+2) Next question difficulty will be measured by closeness of answer.
