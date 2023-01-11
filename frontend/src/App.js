@@ -4,13 +4,14 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Redirect,
   Link
 } from "react-router-dom";
-import "./styles.css";
-import Score from "./Score";
-import Login from "./Login";
-import Register from "./Register";
+// import "./styles.css";
+// import Score from "./Score";
+// import Login from "./Login";
+// import Register from "./Register";
+import {login} from "./components/Logins";
+import Copyright from "./components/Copyright.jsx";
 
 const FromVideoRecorder = ({ push, setQuestion, getQue}) => {
 
@@ -106,16 +107,22 @@ const VideoPreviewPage = (props) => {
 };
 
 export default function App() {
+  const location = 'https://localhost:5000'
+
   return (
-    <Router>
-      <Switch>
-        <Redirect to="/videoRecord" exact path="/" />
-        <Route path="/videoRecord" component={VideoRecordPage} />
-        <Route path="/videoPreview" component={VideoPreviewPage} />
-        <Route path="/login" component={Login} />
-        <Route path="/register" component={Register} />
-        <Route path="/score" component={Score} />
-      </Switch>
-    </Router>
+    <div>
+      <Router>
+        <Switch>
+          {/* <Redirect to="/videoRecord" exact path="/" />
+          <Route path="/videoRecord" component={VideoRecordPage} />
+          <Route path="/videoPreview" component={VideoPreviewPage} />
+          <Route path="/login" component={Login} />
+          <Route path="/register" component={Register} />
+          <Route path="/score" component={Score} /> */}
+          <Route path = "/" location={location} component = {login} />
+        </Switch>
+      </Router>
+      <Copyright/>
+    </div>
   );
 }
