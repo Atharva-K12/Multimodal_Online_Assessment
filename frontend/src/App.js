@@ -118,12 +118,12 @@ export default function App() {
           <Route path="/login" component={Login} />
           <Route path="/register" component={Register} />
           <Route path="/score" component={Score} /> */}
-          <Route path = "/" location={location} component = {FrontPage} />
           <Route path = "/student-login" location={location} component = {StudentLogin} />
           <Route path = "/teacher-login" location={location} component = {TeacherLogin} />
           <Route path = "/admin-login" location={location} component = {AdminLogin} />
           <Route path = "/student-register" location={location} component = {StudentRegister} />
           <Route path = "/teacher-register" location={location} component = {TeacherRegister} />
+          <Route path = "/" location={location} component = {FrontPage} />
         </Switch>
       </Router>
       <Copyright/>
