@@ -1,6 +1,7 @@
 import React, {useState} from 'react'
 import '../../css/Logins/Register.css'
 import Navbar from './Navbar'
+import {Link} from 'react-router-dom'
 
 export default function StudentRegister(props) {
     const location = props.location
@@ -54,7 +55,7 @@ export default function StudentRegister(props) {
                     <input className='form-control' type='text' name='phone' placeholder='Phone' onChnage = {handleChange}/>
                 </div>
                 <input type='submit' value='Register' className='btn m-1 btn-primary' onClick = {handleSubmit}/>
-                <p>Already have an account, <a to = "/teacher-login" className = 'btn m-1 btn-sm btn-warning'>Login</a></p>
+                <p>Already have an account, <Link to = "/teacher-login" className = 'btn m-1 btn-sm btn-warning'>Login</Link></p>
             </form>
         </div>
     </div>

@@ -1,6 +1,7 @@
 import React, {useState} from 'react'
 import '../../css/Logins/Login.css'
 import Navbar from './Navbar'
+import { Link } from 'react-router-dom'
 
 export default function TeacherLogin(props) {
     const location = props.location
@@ -47,7 +48,7 @@ export default function TeacherLogin(props) {
                     <input className='form-control' type='text' name='password' placeholder='Password' onChange={handleChange}/>
                 </div>
                 <input type='submit' value='Login' className='btn m-1 btn-primary' onClick={handleSubmit}/>
-                <p>Do not have an accout, <a to='/teacher-register' className='btn m1 btn-sm btn-warning'>Register</a></p>
+                <p>Do not have an accout, <Link to='/teacher-register' className='btn m1 btn-sm btn-warning'>Register</Link></p>
             </form>
         </div>
     </div>
