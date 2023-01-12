@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
-import { Link } from 'react-router-dom'
 import '../../css/Logins/Login.css'
+import Navbar from './Navbar'
 
 export default function AdminLogin(props) {
     const location = props.location
@@ -35,17 +35,20 @@ export default function AdminLogin(props) {
     }
 
   return (
-    <div className='container shadow'>
-        <h3 className='cover-image'>Login</h3>
-        <form className='form-container'>
-            <div className='mb-3'>
-                <input className='form-control' type='text' name='username' placeholder='Username' onChange={handleChange}/>
-            </div>
-            <div className='mb-3'>
-                <input className='form-control' type='text' name='password' placeholder='Password' onChange={handleChange}/>
-            </div>
-            <input type='submit' value='Login' className='btn m-1 btn-primary' onClick={handleSubmit}/>
-        </form>
+    <div>
+        <Navbar />
+        <div className='container shadow'>
+            <h3 className='cover-image'>Login</h3>
+            <form className='form-container'>
+                <div className='mb-3'>
+                    <input className='form-control' type='text' name='username' placeholder='Username' onChange={handleChange}/>
+                </div>
+                <div className='mb-3'>
+                    <input className='form-control' type='text' name='password' placeholder='Password' onChange={handleChange}/>
+                </div>
+                <input type='submit' value='Login' className='btn m-1 btn-primary' onClick={handleSubmit}/>
+            </form>
+        </div>
     </div>
   )
 }

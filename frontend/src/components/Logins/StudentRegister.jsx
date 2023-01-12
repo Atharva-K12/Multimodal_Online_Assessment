@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 import '../../css/Logins/Register.css'
-import { Link } from 'react-router-dom'
+import Navbar from './Navbar'
 
 export default function StudentRegister(props) {
     const location = props.location
@@ -36,24 +36,27 @@ export default function StudentRegister(props) {
     }
 
   return (
-    <div className='container shadow'>
-        <h3 className='cover-image'>Register</h3>
-        <form className='form-container'>
-            <div className='mb-3'>
-                <input className='form-control' type='text' name='username' placeholder='Username' onChnage = {handleChange}/>
-            </div>
-            <div className='mb-3'>
-                <input className='form-control' type='text' name='password' placeholder='Password' onChnage = {handleChange}/>
-            </div>
-            <div className='mb-3'>
-                <input className='form-control' type='text' name='email' placeholder='Email' onChnage = {handleChange}/>
-            </div>
-            <div className='mb-3'>
-                <input className='form-control' type='text' name='name' placeholder='Name' onChnage = {handleChange}/>
-            </div>
-            <input type='submit' value='Register' className='btn m-1 btn-primary' onClick = {handleSubmit}/>
-            <p>Already have an account, <Link to = "/student-login" className = 'btn m-1 btn-sm btn-warning'>Login</Link></p>
-        </form>
+    <div>
+        <Navbar />
+        <div className='container shadow'>
+            <h3 className='cover-image'>Register</h3>
+            <form className='form-container'>
+                <div className='mb-3'>
+                    <input className='form-control' type='text' name='username' placeholder='Username' onChnage = {handleChange}/>
+                </div>
+                <div className='mb-3'>
+                    <input className='form-control' type='text' name='password' placeholder='Password' onChnage = {handleChange}/>
+                </div>
+                <div className='mb-3'>
+                    <input className='form-control' type='text' name='email' placeholder='Email' onChnage = {handleChange}/>
+                </div>
+                <div className='mb-3'>
+                    <input className='form-control' type='text' name='name' placeholder='Name' onChnage = {handleChange}/>
+                </div>
+                <input type='submit' value='Register' className='btn m-1 btn-primary' onClick = {handleSubmit}/>
+                <p>Already have an account, <a to = "/student-login" className = 'btn m-1 btn-sm btn-warning'>Login</a></p>
+            </form>
+        </div>
     </div>
   )
 }

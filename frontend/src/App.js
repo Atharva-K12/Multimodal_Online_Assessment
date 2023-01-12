@@ -10,8 +10,7 @@ import {
 // import Score from "./Score";
 // import Login from "./Login";
 // import Register from "./Register";
-import {login} from "./components/Logins";
-import Copyright from "./components/Copyright.jsx";
+import { Copyright, AdminLogin, FrontPage, StudentLogin, StudentRegister, TeacherLogin, TeacherRegister } from "./components";
 
 const FromVideoRecorder = ({ push, setQuestion, getQue}) => {
 
@@ -119,7 +118,12 @@ export default function App() {
           <Route path="/login" component={Login} />
           <Route path="/register" component={Register} />
           <Route path="/score" component={Score} /> */}
-          <Route path = "/" location={location} component = {login} />
+          <Route path = "/" location={location} component = {FrontPage} />
+          <Route path = "/student-login" location={location} component = {StudentLogin} />
+          <Route path = "/teacher-login" location={location} component = {TeacherLogin} />
+          <Route path = "/admin-login" location={location} component = {AdminLogin} />
+          <Route path = "/student-register" location={location} component = {StudentRegister} />
+          <Route path = "/teacher-register" location={location} component = {TeacherRegister} />
         </Switch>
       </Router>
       <Copyright/>
