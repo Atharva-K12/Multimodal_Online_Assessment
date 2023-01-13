@@ -170,6 +170,7 @@ class Recommender:
                 for cluster in clusters:
                     if self.distance_metric(cluster[0]['vector'], question['vector']) < self.threshold:
                         cluster.append(question)
+                        break
                 else:
                     clusters.append([question])
         self.clusters = clusters
