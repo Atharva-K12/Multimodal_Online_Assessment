@@ -17,15 +17,18 @@ export default function StudentRegister(props) {
     }
 
     const handleSubmit = (e) => {
+        e.preventDefault()
+        console.log(student)
         if(student === {}){
             alert('Please fill in the form')
         }else{
             let url = location + '/student-register'
-            let formData = new FormData();
-            formData.append(student);
             fetch(url, {
-                method: 'POST',
-                body: formData
+                method:'POST',
+                headers:{ 
+                    'Content-type':'application/json',
+                },
+                body:JSON.stringify(student)
             })
             .then(response => {
                 if(response.ok){
@@ -33,6 +36,7 @@ export default function StudentRegister(props) {
                 }
                 alert(response.json()['message'])
             })
+            .catch((e)=>console.log(e))
         }
     }
 
@@ -43,16 +47,16 @@ export default function StudentRegister(props) {
             <h3 className='cover-image'>Register</h3>
             <form className='form-container'>
                 <div className='mb-3'>
-                    <input className='form-control' type='text' name='username' placeholder='Username' onChnage = {handleChange}/>
+                    <input className='form-control' type='text' name='username' placeholder='Username' onChange = {handleChange}/>
                 </div>
                 <div className='mb-3'>
-                    <input className='form-control' type='text' name='password' placeholder='Password' onChnage = {handleChange}/>
+                    <input className='form-control' type='text' name='password' placeholder='Password' onChange = {handleChange}/>
                 </div>
                 <div className='mb-3'>
-                    <input className='form-control' type='text' name='email' placeholder='Email' onChnage = {handleChange}/>
+                    <input className='form-control' type='text' name='email' placeholder='Email' onChange = {handleChange}/>
                 </div>
                 <div className='mb-3'>
-                    <input className='form-control' type='text' name='name' placeholder='Name' onChnage = {handleChange}/>
+                    <input className='form-control' type='text' name='name' placeholder='Name' onChange = {handleChange}/>
                 </div>
                 <input type='submit' value='Register' className='btn m-1 btn-primary' onClick = {handleSubmit}/>
                 <p>Already have an account, <Link to = "/student-login" className = 'btn m-1 btn-sm btn-warning'>Login</Link></p>

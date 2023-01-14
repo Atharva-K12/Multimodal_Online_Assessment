@@ -2,24 +2,29 @@ from flask import Blueprint, request,current_app, make_response, jsonify
 import bcrypt,jwt
 
 login = Blueprint('login', __name__)
-db = current_app.config['db']
 
-@login.route('/student-reister', methods=['POST'])
+#db = current_app.config['db']
+
+@login.route('/student-register', methods=['POST'])
 def student_register():
     # Code to register student
     if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-        user = db.student.find_one({'username': username})
-        if user:
-            return make_response(jsonify({'message': 'Username already exists'}), 401)
-        else:
-            password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
-            db.student.insert_one({'username': username, 'password': password, 'email': request.form['email'], 'name': request.form['name']})
-            return make_response(jsonify({'message': 'Student registered successfully'}), 200)
+        data = request.get_json()
+        username = data['username']
+        password = data['password']
+        print(username)
+    
+    return make_response(jsonify({'message': 'Student registered successfully'}), 200)
+        # user = db.student.find_one({'username': username})
+        # if user:
+        #     return make_response(jsonify({'message': 'Username already exists'}), 401)
+        # else:
+        #     password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+        #     db.student.insert_one({'username': username, 'password': password, 'email': request.form['email'], 'name': request.form['name']})
+        #     return make_response(jsonify({'message': 'Student registered successfully'}), 200)
 
 
-@login.route('/teacher-reister', methods=['POST'])
+@login.route('/teacher-register', methods=['POST'])
 def teacher_register():
     # Code to register teacher
     if request.method == 'POST':

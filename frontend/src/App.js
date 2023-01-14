@@ -106,7 +106,7 @@ const VideoPreviewPage = (props) => {
 };
 
 export default function App() {
-  const location = 'https://127.0.0.1:5000'
+  const location = 'http://127.0.0.1:5000'
 
   return (
     <div>
