@@ -19,9 +19,9 @@ RUN pip3 install flask_cors
 RUN pip3 install dlib
 
 WORKDIR /app
-RUN git sumbodule init
-RUN cd frontend && npm start
-RUN cd backend && flask run
+# RUN git sumbodule init
+# RUN cd frontend && npm start
+# RUN cd backend && flask run
 
 # RUN ls
 # # run the react app from frontend folder
