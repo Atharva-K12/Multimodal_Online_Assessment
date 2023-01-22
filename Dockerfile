@@ -17,6 +17,7 @@ RUN pip3 install -U sentence-transformers
 RUN pip3 install flask
 RUN pip3 install flask_cors
 RUN pip3 install dlib
+RUN pip3 install bson
 
 WORKDIR /app
 RUN git sumbodule init
