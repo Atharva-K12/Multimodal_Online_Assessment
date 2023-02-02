@@ -28,14 +28,15 @@ def student_register():
 def teacher_register():
     # Code to register teacher
     if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
+        data = request.get_json()
+        username = data['username']
+        password = data['password']
         user = db.teacher.find_one({'username': username})
         if user:
             return make_response(jsonify({'message': 'Username already exists'}), 401)
         else:
             password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
-            db.student.insert_one({'username': username, 'password': password, 'email': request.form['email'], 'name': request.form['name'], 'status':'pending' })
+            db.teacher.insert_one({'username': username, 'password': password, 'email': request.form['email'], 'name': request.form['name'], 'status':'pending' })
             return make_response(jsonify({'message': 'Teacher registered successfully and status pending'}), 200)
 
 
@@ -44,8 +45,9 @@ def teacher_register():
 def student_login():
     # Code to login student
     if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
+        data = request.get_json()
+        username = data['username']
+        password = data['password']
         user = db.student.find_one({'username': username})
         if user:
             if bcrypt.hashpw(password.encode('utf-8'), user['password'].encode('utf-8')) == user['password'].encode('utf-8'):
@@ -61,8 +63,9 @@ def student_login():
 def teacher_login():
     # Code to login teacher
     if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
+        data = request.get_json()
+        username = data['username']
+        password = data['password']
         user = db.teacher.find_one({'username': username})
         if user:
             if bcrypt.hashpw(password.encode('utf-8'), user['password'].encode('utf-8')) == user['password'].encode('utf-8'):
@@ -78,8 +81,9 @@ def teacher_login():
 def admin_login():
     # Code to login teacher
     if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
+        data = request.get_json()
+        username = data['username']
+        password = data['password']
         user = db.admin.find_one({'username': username})
         if user:
             if bcrypt.hashpw(password.encode('utf-8'), user['password'].encode('utf-8')) == user['password'].encode('utf-8'):

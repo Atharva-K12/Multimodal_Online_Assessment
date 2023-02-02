@@ -17,15 +17,17 @@ export default function StudentRegister(props) {
     }
 
     const handleSubmit = (e) => {
+        e.preventDefault()
         if(teacher === {}){
             alert('Please fill in the form')
         }else{
             let url = location + '/teacher-register'
-            let formData = new FormData();
-            formData.append(teacher);
             fetch(url, {
-                method: 'POST',
-                body: formData
+                method:'POST',
+                headers:{ 
+                    'Content-type':'application/json',
+                },
+                body:JSON.stringify(teacher)
             })
             .then(response => {
                 if(response.ok){

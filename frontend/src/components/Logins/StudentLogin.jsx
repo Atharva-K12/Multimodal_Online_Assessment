@@ -16,15 +16,17 @@ export default function StudentLogin(props) {
     }
 
     const handleSubmit = (e) => {
+        e.preventDefault()
         if(login === {}){
             alert('Please fill in the form')
         }else{
             let url = location + '/student-login';
-            let formData = new FormData();
-            formData.append(login);
             fetch(url, {
-                method: 'POST',
-                body: formData
+                method:'POST',
+                headers:{ 
+                    'Content-type':'application/json',
+                },
+                body:JSON.stringify(login)
             })
             .then(response => {
                 if(response.ok){

@@ -15,15 +15,17 @@ export default function AdminLogin(props) {
     }
 
     const handleSubmit = (e) => {
+        e.preventDefault()
         if(login === {}){
             alert('Please fill in the form')
         }else{
             let url = location + '/admin-login';
-            let formData = new FormData();
-            formData.append(login);
             fetch(url, {
-                method: 'POST',
-                body: formData
+                method:'POST',
+                headers:{ 
+                    'Content-type':'application/json',
+                },
+                body:JSON.stringify(login)
             })
             .then(response => {
                 if(response.ok){

@@ -18,7 +18,6 @@ export default function StudentRegister(props) {
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        console.log(student)
         if(student === {}){
             alert('Please fill in the form')
         }else{
