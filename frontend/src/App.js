@@ -10,7 +10,7 @@ import {
 // import Score from "./Score";
 // import Login from "./Login";
 // import Register from "./Register";
-import { Copyright, AdminLogin, FrontPage, StudentLogin, StudentRegister, TeacherLogin, TeacherRegister } from "./components";
+import { Copyright, AdminLogin, FrontPage, StudentLogin, StudentRegister, TeacherLogin, TeacherRegister, AdminDashboard } from "./components";
 
 const FromVideoRecorder = ({ push, setQuestion, getQue}) => {
 
@@ -122,6 +122,7 @@ export default function App() {
           <Route path = "/teacher-login" render={() => <TeacherLogin location = {location} />}/>
           <Route path = "/admin-login" render={() => <AdminLogin location = {location} />} />
           <Route path = "/student-register" render={() => <StudentRegister location = {location} />} />
+          <Route path = "/admin-dashboard" render={() => <AdminDashboard location = {location} />} />
           <Route path = "/teacher-register" render={() => <TeacherRegister location = {location} />} />
           <Route path = "/" render={() => <FrontPage />} />
         </Switch>
