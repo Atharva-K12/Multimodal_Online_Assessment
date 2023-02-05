@@ -1,4 +1,6 @@
 import random
+
+import pandas as pd
 from sentenceMatch import sentence_encoding
 import numpy as np
 
@@ -69,9 +71,9 @@ class RecommenderKNN:
         self.question_list = question_list
         self.vectorized_questions = Vectorize_Questions(self.question_list).vectorized_questions
         self.recommended_questions = []
-        self.recommend()
         self.k = 5
         self.distance_metric = self.euclidean_distance
+        self.recommend()
     
     def euclidean_distance(self, vector1, vector2):
         return np.linalg.norm(vector1 - vector2)
@@ -79,12 +81,20 @@ class RecommenderKNN:
     def cosine_similarity(self, vector1, vector2):
         return np.dot(vector1, vector2) / (np.linalg.norm(vector1) * np.linalg.norm(vector2))
 
-    def recommend(self, question):
+    def recommend(self, question=None):
+        if question is None:
+            question = self.vectorized_questions[np.random.randint(0, len(self.vectorized_questions))]
+            self.recommended_questions.append(question)
+            # print(self.recommended_questions[-1])
+            return 
         nearest_neighbours = self.find_nearest_neighbours(question)
-        for neighbour in nearest_neighbours:
-            if np.random.random() > 0.5:
-                self.recommended_questions.append(neighbour['question'])
-                break
+        flag = True
+        while(flag):
+            for neighbour in nearest_neighbours:
+                if np.random.random() > 0.5 and neighbour not in self.recommended_questions:
+                    self.recommended_questions.append(neighbour)
+                    flag = False
+                    break
         return self.recommended_questions[-1]
     
 
@@ -92,9 +102,20 @@ class RecommenderKNN:
         distances = []
         for vectorized_question in self.vectorized_questions:
             distance = self.distance_metric(vectorized_question['vector'], question['vector'])
-            distances.append({'question':vectorized_question['question'], 'distance':distance})
+            distances.append({'question':vectorized_question['question'],'vector':vectorized_question['vector'], 'distance':distance})
         distances.sort(key=lambda x: x['distance'])
-        return distances[:self.k]
+        # threshold = 0.3
+        # value = 0
+        # for distance in distances:
+        #     if distance['distance'] < threshold:
+        #         value +=1
+        # recall = self.k/value
+        # f1 = 2*1*recall/(1+recall)
+        # print("recall = " + str(f1) + "\t" + str(recall))
+        # remove 'distaknce' key from the list
+        for distance in distances:
+            del distance['distance']
+        return distances[10:self.k+10]
 
 
 class  RecommenderCluster:
@@ -102,10 +123,11 @@ class  RecommenderCluster:
         self.question_list = question_list
         self.vectorized_questions = Vectorize_Questions(self.question_list).vectorized_questions
         self.recommended_questions = []
-        self.recommend()
+        # self.recommend()
         self.k = 5
-        self.distance_metric = self.euclidean_distance
-        self.threshold = 0.5
+        self.distance_metric = self.cosine_similarity
+        self.threshold = 1.0
+        self.recommend()
     
     def euclidean_distance(self, vector1, vector2):
         return np.linalg.norm(vector1 - vector2)
@@ -127,24 +149,35 @@ class  RecommenderCluster:
                     clusters.append([vectorized_question])
         return clusters
     
-    def recommend(self, question):
+    def recommend(self, question = None):
+        if question is None:
+            question = self.vectorized_questions[np.random.randint(0, len(self.vectorized_questions))]
+            self.recommended_questions.append(question)
+            return
         clusters = self.cluster()
         cluster_medians = []
         for cluster in clusters:
             cluster_medians.append(self.find_median(cluster))
         distances = []
-        for cluster_median in cluster_medians:
+        for i,cluster_median in enumerate(cluster_medians):
             distance = self.distance_metric(cluster_median['vector'], question['vector'])
-            distances.append({'question':cluster_median['question'], 'distance':distance})
+            distances.append({'question':cluster_median['question'],'vector': cluster_median['vector'], 'distance':distance,'index':i})
         distances.sort(key=lambda x: x['distance'])
-        self.recommended_questions.append(distances[0]['question'])
+        index = distances[0]['index']
+        flag = True
+        while(flag):
+            for member in clusters[index]:
+                if member not in self.recommended_questions:
+                    self.recommended_questions.append(member)
+                    flag = False
+                    break
         return self.recommended_questions[-1]
     
     def find_median(self, cluster):
         distances = []
         for vectorized_question in cluster:
             distance = self.distance_metric(cluster[0]['vector'], vectorized_question['vector'])
-            distances.append({'question':vectorized_question['question'], 'distance':distance})
+            distances.append({'question':vectorized_question['question'],'vector': vectorized_question['vector'], 'distance':distance})
         distances.sort(key=lambda x: x['distance'])
         return distances[len(distances)//2]
 
@@ -192,4 +225,24 @@ class QuestionHandler:
     
     
 
+def RecomTest():
+    #read questions from database
+    questions= pd.read_csv('../Trials/Question Bank.csv')
+    questions=questions.to_dict('records')
+    c2=RecommenderCluster(questions)
+    query_question =c2.recommended_questions[0]
+    print('query_question')
+    print(query_question['question'])
+    for i in range(4):
+        query_question = c2.recommend(query_question)
+        print(i)
+        print('query_question')
+        print(query_question['question'])
+    # q = {'question':'What is a virtual function?'}
+    # c2.recommended_questions.append({'question':q['question'],'vector':Vectorize_Questions([q]).vectorized_questions[0]['vector']})
+    # ans = 'A virtual function is a member function of a class, and its functionality can be overridden in its derived class. This function can be implemented by using a keyword called virtual, and it can be given during function declaration'
+    # print(c2.recommend(ans))   
+
+if __name__ == "__main__":
+    RecomTest()
         

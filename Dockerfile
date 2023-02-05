@@ -1,9 +1,11 @@
 FROM ubuntu:latest
-RUN apt-get update
+RUN apt update
 COPY . /app
 RUN apt install -y python3
 RUN apt install -y python3-pip
 RUN apt install -y cmake
+RUN apt install -y nodejs
+RUN apt install -y npm
 RUN apt install -y libsm6
 RUN apt install -y libxext6
 RUN apt install -y libxrender1
@@ -21,7 +23,8 @@ RUN pip3 install pymongo
 
 WORKDIR /app
 RUN git sumbodule init
-# RUN cd frontend && npm start
+RUN cd frontend && npm install
+WORKDIR /app
 # RUN cd backend && flask run
 
 # RUN ls

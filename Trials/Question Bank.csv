@@ -1,4 +1,4 @@
-Question ID,Question,Answer,Difficulty
+Question ID,question,Answer,Difficulty
 1,What is OOPS?,OOPS is abbreviated as Object Oriented Programming system in which programs are considered as a collection of objects. Each object is nothing but an instance of a class.,Easy
 2,Which are the basic concepts of OOPS?,Following are the concepts of OOPS: 1) Abstraction 2) Encapsulation 3) Inheritance 4) Polymorphism,Easy
 3,What is a class?,A class is simply a representation of a type of object. It is the blueprint/plan/template that describes the details of an object.,Easy
