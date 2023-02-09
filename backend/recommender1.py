@@ -302,7 +302,7 @@ def RecomTest():
     questions=questions.to_dict('records')
     c2=RecommenderCluster2(questions)
     query_question =c2.recommended_questions[0]
-    print("Memory Usage: ",tracemalloc.get_traced_memory()[0]/10**6,"MB")
+    print("Memory Usage: ",tracemalloc.get_traced_memory()[1]/10**6,"MB")
     print('query_question')
     print(query_question['question'])
     for i in range(4):
