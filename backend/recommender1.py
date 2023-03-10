@@ -3,13 +3,17 @@ import pandas as pd
 from sentenceMatch import sentence_encoding
 import numpy as np
 import spacy
-import tracemalloc
+# import tracemalloc
+import os
 
-nlp = spacy.load('en_core_web_sm')
 import nltk
+nlp = spacy.load('en_core_web_sm')
+from nltk.tag import StanfordNERTagger
 from nltk.tokenize import word_tokenize
-from nltk.probability import FreqDist
 from nltk.corpus import stopwords
+from nltk import FreqDist
+import subprocess
+
 
 class Question:
     def __init__(self, question_list):
@@ -236,7 +240,7 @@ class  RecommenderCluster2:
         self.recommended_questions = []
         self.k = 5
         self.distance_metric = self.cosine_similarity
-        self.threshold = 0.7
+        self.threshold = 0.75
         self.recommend()
     
     def euclidean_distance(self, vector1, vector2):
@@ -254,7 +258,6 @@ class  RecommenderCluster2:
                 for cluster in clusters:
                     if self.distance_metric(cluster[0]['vector'], vectorized_question['vector']) > self.threshold:
                         cluster.append(vectorized_question)
-                        break
                 else:
                     clusters.append([vectorized_question])
         return clusters
@@ -271,17 +274,25 @@ class  RecommenderCluster2:
         distances = []
         question = [{'question': question}]
         question1 = Vectorize_Questions(question).vectorized_questions[0]
-        for i,cluster_median in enumerate(cluster_medians):
-            distance = self.distance_metric(cluster_median['vector'], question1['vector'])
-            distances.append({'question':cluster_median['question'],'vector': cluster_median['vector'], 'distance':distance,'index':i})
+        for i,cluster in enumerate(clusters):
+            for question_ in cluster:
+                if question_ == self.recommended_questions[-1]:
+                    distance = self.distance_metric(cluster_medians[i]['vector'], question1['vector'])
+                    distances.append({'distance':distance,'index':i})
+                    break
         distances.sort(key=lambda x: x['distance'])
         index = distances[0]['index']
-        flag = True
-        while(flag):
+        flag = 0
+        for member in clusters[index]:
+            if member not in self.recommended_questions:
+                self.recommended_questions.append(member)
+                flag = 1
+                break
+        if flag == 0:
+            index = np.random.randint(0, len(clusters))
             for member in clusters[index]:
                 if member not in self.recommended_questions:
                     self.recommended_questions.append(member)
-                    flag = False
                     break
         return self.recommended_questions[-1]
     
@@ -293,22 +304,33 @@ class  RecommenderCluster2:
         distances.sort(key=lambda x: x['distance'])
         return distances[len(distances)//2]
     
-    
+def KnnTest():
+    questions= pd.read_csv('../Trials/Question Bank.csv')
+    questions=questions.to_dict('records')
+    c1=RecommenderKNN(questions)
+    print("\nquery question")
+    query_question =c1.recommended_questions[0]
+    print(query_question['question'])
+    for i in range(4):
+        print("\nquery question")
+        query_question = c1.recommend(query_question)
+        print(query_question['question'])
+
 
 def RecomTest():
     #read questions from database
-    tracemalloc.start()
+    # tracemalloc.start()
     questions= pd.read_csv('../Trials/Question Bank.csv')
     questions=questions.to_dict('records')
     c2=RecommenderCluster2(questions)
     query_question =c2.recommended_questions[0]
-    print("Memory Usage: ",tracemalloc.get_traced_memory()[1]/10**6,"MB")
-    print('query_question')
+    # print("Memory Usage: ",tracemalloc.get_traced_memory()[1]/10**6,"MB")
+    print('\nquery_question')
     print(query_question['question'])
     for i in range(4):
         answer = input('Enter answer: ')
         query_question = c2.recommend(answer)
-        print('query_question')
+        print('\nquery_question')
         print(query_question['question'])
     # q = {'question':'What is a virtual function?'}
     # c2.recommended_questions.append({'question':q['question'],'vector':Vectorize_Questions([q]).vectorized_questions[0]['vector']})
@@ -330,7 +352,27 @@ def NERTest():
         entities = [entity.text for entity in document.ents]
         print(entities)
 
+def NER3():
+    st = StanfordNERTagger('..//stanford-ner-2020-11-17//classifiers//english.muc.7class.distsim.crf.ser.gz','..//stanford-ner-2020-11-17//stanford-ner.jar',encoding='utf-8')
+    questions= pd.read_csv('../Trials/Question Bank.csv')
+    questions=questions.to_dict('records')
+    stopword = set(stopwords.words('english'))
+    for question in questions:
+        print(question['question'])
+        print(question['Answer'])
+        q_words = word_tokenize(question['question'])
+        q_words = [word for word in q_words if word not in stopword]
+        a_words = word_tokenize(question['Answer'])
+        a_words = [word for word in a_words if word not in stopword]
+        classified_text = st.tag(q_words)
+        print(classified_text)
+        classified_text = st.tag(a_words)
+        print(classified_text)
+        print()
+
 if __name__ == "__main__":
-    RecomTest()
+    # KnnTest()
+    # RecomTest()
     # NERTest()
+    NER3()
         
