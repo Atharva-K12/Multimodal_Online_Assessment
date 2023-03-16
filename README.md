@@ -17,6 +17,10 @@ Usage:
 
  1) Move inside the `frontend` directory
  
+ 2) Run the command to install dependencies
+        
+        npm i
+ 
  2) Use the below command to run your application
        
-       npm start
+        npm start
