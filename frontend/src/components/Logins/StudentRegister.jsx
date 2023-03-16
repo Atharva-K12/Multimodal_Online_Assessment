@@ -55,6 +55,9 @@ export default function StudentRegister(props) {
                     <input className='form-control' type='text' name='email' placeholder='Email' onChange = {handleChange}/>
                 </div>
                 <div className='mb-3'>
+                    <input className='form-control' type='text' name='name' placeholder='Name' onChange = {handleChange}/>
+                </div>
+                <div className='mb-3'>
                     <input className='form-control' type='text' name='roll_no' placeholder='Roll Number' onChange = {handleChange}/>
                 </div>
                 <input type='submit' value='Register' className='btn m-1 btn-primary' onClick = {handleSubmit}/>
