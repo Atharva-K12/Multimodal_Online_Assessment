@@ -10,4 +10,4 @@ Usage :
         
  3) Use the below command to run your application
         
-        flask –-app backend run
+        python run.py
