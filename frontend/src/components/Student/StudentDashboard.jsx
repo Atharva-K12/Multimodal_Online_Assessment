@@ -1,16 +1,26 @@
 import React from 'react'
 import Title from './Title'
 import avatar from "./images/avatar.png"
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 
 function StudentDashboard() {
+
+    let history = useHistory()
+
     const handleLogout = () => {
-        
+        localStorage.removeItem('token')
+        localStorage.removeItem('username')
+        localStorage.removeItem('roll_no')
+        history.push('/student-login')
     }
 
     const mystyle={
         maxWidth: "540px",
     }
+
+    // if(!login){
+    //     return <Redirect to="/student-login"/>
+    // }
 
     return (
         <div>
