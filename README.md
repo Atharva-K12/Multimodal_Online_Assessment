@@ -11,3 +11,12 @@ Usage :
  3) Use the below command to run your application
         
         python run.py
+
+# Frontend
+Usage:
+
+ 1) Move inside the `frontend` directory
+ 
+ 2) Use the below command to run your application
+       
+       npm start
