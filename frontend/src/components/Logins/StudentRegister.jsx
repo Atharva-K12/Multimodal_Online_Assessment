@@ -1,10 +1,11 @@
 import React, {useState} from 'react'
 import '../../css/Logins/Register.css'
 import Navbar from './Navbar'
-import {Link} from 'react-router-dom'
+import {Link, useHistory} from 'react-router-dom'
 
 export default function StudentRegister(props) {
     const location = props.location
+    const history = useHistory()
 
     const [student, setStudent] = useState({})
 
@@ -31,9 +32,12 @@ export default function StudentRegister(props) {
             })
             .then(response => {
                 if(response.ok){
-                    return response.json()
+                    history.push("/student-login")
+                    // return response.json()
                 }
-                alert(response.json()['message'])
+                else {
+                    alert(response.json()['message'])                        
+                }
             })
             .catch((e)=>console.log(e))
         }

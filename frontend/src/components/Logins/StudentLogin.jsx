@@ -41,6 +41,7 @@ export default function StudentLogin(props) {
                     alert(response.json()['message'])
                 }
             })
+            .catch(err => {console.log(err)})
         }
     }
 

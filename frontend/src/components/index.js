@@ -6,3 +6,4 @@ export {default as TeacherLogin} from './Logins/TeacherLogin';
 export {default as StudentRegister} from './Logins/StudentRegister';
 export {default as TeacherRegister} from './Logins/TeacherRegister';
 export {default as AdminDashboard} from './Admin/AdminDashboard';
+export {default as StudentDashboard} from './Student/StudentDashboard';
