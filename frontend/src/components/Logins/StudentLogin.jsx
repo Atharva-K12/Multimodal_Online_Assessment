@@ -1,10 +1,12 @@
 import React, {useState} from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import '../../css/Logins/Login.css'
 import Navbar from './Navbar'
 
 export default function StudentLogin(props) {
     const location = props.location
+
+    let history = useHistory()
 
     const [login, setLogin] = useState({})
     const handleChange = (e) => {
@@ -33,10 +35,13 @@ export default function StudentLogin(props) {
                     response = response.json()
                     response.then(data => {
                         // Save token and username to local storage
+                        console.log(data)
                         localStorage.setItem('token', data['token'])
                         localStorage.setItem('username', data['username'])
                         localStorage.setItem('roll_no', data['roll_no'])
                     })
+                    // Redirect to student dashboard
+                    history.push('/student-dashboard')
                 }else{
                     alert(response.json()['message'])
                 }
