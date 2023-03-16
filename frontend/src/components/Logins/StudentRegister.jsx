@@ -49,13 +49,13 @@ export default function StudentRegister(props) {
                     <input className='form-control' type='text' name='username' placeholder='Username' onChange = {handleChange}/>
                 </div>
                 <div className='mb-3'>
-                    <input className='form-control' type='text' name='password' placeholder='Password' onChange = {handleChange}/>
+                    <input className='form-control' type='password' name='password' placeholder='Password' onChange = {handleChange}/>
                 </div>
                 <div className='mb-3'>
                     <input className='form-control' type='text' name='email' placeholder='Email' onChange = {handleChange}/>
                 </div>
                 <div className='mb-3'>
-                    <input className='form-control' type='text' name='name' placeholder='Name' onChange = {handleChange}/>
+                    <input className='form-control' type='text' name='roll_no' placeholder='Roll Number' onChange = {handleChange}/>
                 </div>
                 <input type='submit' value='Register' className='btn m-1 btn-primary' onClick = {handleSubmit}/>
                 <p>Already have an account, <Link to = "/student-login" className = 'btn m-1 btn-sm btn-warning'>Login</Link></p>

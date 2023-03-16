@@ -29,10 +29,17 @@ export default function StudentLogin(props) {
                 body:JSON.stringify(login)
             })
             .then(response => {
-                if(response.ok){
-                    return response.json()
+                if(response.status === 200){
+                    response = response.json()
+                    response.then(data => {
+                        // Save token and username to local storage
+                        localStorage.setItem('token', data['token'])
+                        localStorage.setItem('username', data['username'])
+                        localStorage.setItem('roll_no', data['roll_no'])
+                    })
+                }else{
+                    alert(response.json()['message'])
                 }
-                alert(response.json()['message'])
             })
         }
     }
@@ -47,7 +54,7 @@ export default function StudentLogin(props) {
                     <input className='form-control' type='text' name='username' placeholder='Username' onChange={handleChange}/>
                 </div>
                 <div className='mb-3'>
-                    <input className='form-control' type='text' name='password' placeholder='Password' onChange={handleChange}/>
+                    <input className='form-control' type='password' name='password' placeholder='Password' onChange={handleChange}/>
                 </div>
                 <input type='submit' value='Login' className='btn m-1 btn-primary' onClick={handleSubmit}/>
                 <p>Do not have an accout, <Link to='/student-register' className='btn m1 btn-sm btn-warning'>Register</Link></p>
