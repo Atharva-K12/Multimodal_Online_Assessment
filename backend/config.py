@@ -28,6 +28,6 @@ import yaml
 with open('config.yaml', 'r') as f:
     config = yaml.safe_load(f)
 
-mongo_uri = f"mongodb://{config['mongo_username']}:{config['mongo_password']}@{config['mongo_host']}/?{config['mongo_options']}"
+MONGO_URI = f"mongodb://{config['mongo_username']}:{config['mongo_password']}@{config['mongo_host']}/?{config['mongo_options']}"
 
-print(mongo_uri)
+print(MONGO_URI)
