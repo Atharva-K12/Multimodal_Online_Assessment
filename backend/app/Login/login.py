@@ -35,6 +35,7 @@ def student_login():
         if user:
             # check password with hashed password
             if bcrypt.hashpw(password.encode('utf-8'), user['password']) == user['password']:
+                print()
                 token = jwt.encode({'username': username, 'role': 'student'}, current_app.config['SECRET_KEY'])
                 return make_response(jsonify({'token':token, 'username':username, 'roll_no': user['roll_no']}), 200)
             else:

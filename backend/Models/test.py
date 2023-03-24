@@ -21,3 +21,10 @@ class Test:
     def get_test_id(self, test_name):
         return self.collection.find_one({'Name':test_name})['_id']
     
+    def get_tests(self):
+        tests = self.collection.find()
+        test_list = []
+        for test in tests:
+            test_list.append(test['Name'])
+        return test_list
+    

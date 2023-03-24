@@ -18,7 +18,7 @@ class Enrollment:
         test_list = []
         for test in tests:
             test_list.append(Test().get_test(test['test_id']))
-        return make_response(jsonify({'tests':test_list}), 200)
+        return test_list
 
     def enroll(self, data):
         test_id = Test().get_test_id(data['test_name'])
