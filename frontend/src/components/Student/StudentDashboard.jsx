@@ -1,7 +1,7 @@
 import React,{useState, useEffect} from 'react'
 import Title from './Title'
 import avatar from "./images/avatar.png"
-import { Link, useHistory } from 'react-router-dom'
+import { Link, useHistory, Redirect } from 'react-router-dom'
 
 function StudentDashboard() {
 
@@ -35,9 +35,9 @@ function StudentDashboard() {
         maxWidth: "540px",
     }
 
-    // if(!login){
-    //     return <Redirect to="/student-login"/>
-    // }
+    if(!localStorage.getItem('token')){
+        return <Redirect to="/student-login"/>
+    }
 
     return (
         <div>
@@ -60,6 +60,7 @@ function StudentDashboard() {
             <div className="container">
                 <button className="btn btn-primary" onClick={handleLogout}>Logout</button>
             </div>
+
             <div className="container">
                 <h2>Enrolled Tests</h2>
                 {testlist?.enrollments !== undefined ?
