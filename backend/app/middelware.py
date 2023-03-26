@@ -2,7 +2,7 @@ from flask import current_app
 from functools import wraps
 import jwt
 from flask import request, jsonify
-from Models.student import Student
+from .Models.student import Student
 
 # Token validation wrapper function
 def token_validation(func):

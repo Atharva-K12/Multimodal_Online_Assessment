@@ -1,6 +1,6 @@
 from flask import Blueprint, request,current_app, make_response, jsonify
-from Models.test import Test
-from Models.enrollment import Enrollment
+from ..Models.test import Test
+from ..Models.enrollment import Enrollment
 from ..middelware import token_validation
 
 student = Blueprint('student', __name__)

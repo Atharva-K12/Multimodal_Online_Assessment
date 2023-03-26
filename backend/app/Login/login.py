@@ -1,8 +1,8 @@
 from flask import Blueprint, request,current_app, make_response, jsonify
 import bcrypt,jwt
-from Models.student import Student
-from Models.teacher import Teacher
-from Models.admin import Admin
+from ..Models.student import Student
+from ..Models.teacher import Teacher
+from ..Models.admin import Admin
 
 login = Blueprint('login', __name__)
 
