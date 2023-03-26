@@ -1,4 +1,9 @@
 import React from 'react'
+import { Link, 
+        Router, 
+        Switch, 
+        Route, 
+        Redirect } from 'react-router-dom'
 import VideoRecorder from "react-video-recorder";
 
 const FromVideoRecorder = ({ push, setQuestion, getQue }) => {
@@ -90,17 +95,16 @@ const FromVideoRecorder = ({ push, setQuestion, getQue }) => {
     );
   };
   
-  function VivaVideoRecoreder() {
+  function VivaVideoRecorder() {
     return (
       <Router>
         <Switch>
           <Redirect to="/videoRecord" exact path="/" />
           <Route path="/videoRecord" component={VideoRecordPage} />
           <Route path="/videoPreview" component={VideoPreviewPage} />
-          <Route path="/score" component={Score} />
         </Switch>
       </Router>
     );
   }
 
-export default VivaVideoRecoreder
+export default VivaVideoRecorder

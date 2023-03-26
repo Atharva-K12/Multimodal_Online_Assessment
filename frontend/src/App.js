@@ -12,7 +12,7 @@ import {
 // import Register from "./Register";
 import { Copyright, AdminLogin, FrontPage, StudentLogin, 
           StudentRegister, TeacherLogin, TeacherRegister, 
-          AdminDashboard, StudentDashboard } from "./components";
+          AdminDashboard, StudentDashboard, VivaVideoRecorder } from "./components";
 
 const FromVideoRecorder = ({ push, setQuestion, getQue}) => {
 
@@ -127,6 +127,7 @@ export default function App() {
           <Route path = "/admin-dashboard" render={() => <AdminDashboard location = {location} />} />
           <Route path = "/teacher-register" render={() => <TeacherRegister location = {location} />} />
           <Route path = "/student-dashboard" render={() => <StudentDashboard location = {location} />} />
+          <Route path = "/start-test" render={() => <VivaVideoRecorder location={location} />} />
           <Route path = "/" render={() => <FrontPage />} />
         </Switch>
       </Router>

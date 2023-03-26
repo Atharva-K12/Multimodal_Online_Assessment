@@ -7,3 +7,4 @@ export {default as StudentRegister} from './Logins/StudentRegister';
 export {default as TeacherRegister} from './Logins/TeacherRegister';
 export {default as AdminDashboard} from './Admin/AdminDashboard';
 export {default as StudentDashboard} from './Student/StudentDashboard';
+export {default as VivaVideoRecorder} from './Student/VivaVideoRecorder';
