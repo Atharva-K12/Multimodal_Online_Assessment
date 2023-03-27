@@ -1,6 +1,6 @@
 from pymongo import MongoClient
 # from flask import current_app
-from sentenceMatch import sentence_encoding as vectorise
+from .sentenceMatch import sentence_encoding as vectorise
 # from flask import make_response, jsonify, Blueprint
 
 # db = Blueprint('db', __name__)
