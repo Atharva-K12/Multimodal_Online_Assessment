@@ -6,7 +6,6 @@ from ..Models.admin import Admin
 
 login = Blueprint('login', __name__)
 
-
 @login.route('/student-register', methods=['POST'])
 def student_register():
     if request.method == 'POST':

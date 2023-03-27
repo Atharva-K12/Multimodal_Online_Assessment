@@ -1,8 +1,8 @@
 from pymongo import MongoClient
 from flask import current_app
 from flask import make_response, jsonify
-from Models.test import Test
-from Models.student import Student
+from ..Models.test import Test
+from ..Models.student import Student
 
 class Enrollment:
     def __init__(self):

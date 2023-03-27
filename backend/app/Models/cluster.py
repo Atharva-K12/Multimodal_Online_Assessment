@@ -12,8 +12,7 @@ class Cluster:
     
     def create_new_cluster(self, que_id):
         que_list = [que_id]
-        self.collection.insert_one({'que_list':que_list})
-        return self.get_cluster_id(que_id)
+        return self.collection.insert_one({'median': que_id, 'que_list':que_list})
 
     def add_que_to_cluster(self, que_id, cluster_id):
         cluster = self.get_cluster(cluster_id)
@@ -21,11 +20,16 @@ class Cluster:
         return self.collection.update_one({'_id':cluster_id}, {'$set': {'que_list': cluster['que_list']}})
     
     def get_cluster_id(self, que_id):
-        cluster = self.collection.find_one({'que_list':que_id})
-        if cluster:
-            return cluster['_id']
-        else:
-            return None
+        cluster = self.collection.find()
+        cluster_list = []
+        for c in cluster:
+            if que_id in c['que_list']:
+                cluster_list.append(c['_id'])
+        return cluster_list
+    
+    def getMedian(self, cluster_id):
+        cluster = self.collection.find_one({'_id': cluster_id})
+        return cluster['median']
         
     def get_cluster_list(self):
         return self.collection.find()

@@ -1,6 +1,10 @@
-from flask import Blueprint, request,current_app, make_response, jsonify
+from flask import Blueprint, request, make_response, jsonify
 from ..Models.test import Test
 from ..Models.enrollment import Enrollment
+from ..Functionalities.clusterData import ClusterData
+from ..Functionalities.recommendationSystem import Recommendation
+from ..Models.student import Student
+from ..Models.test import Test
 from ..middelware import token_validation
 
 student = Blueprint('student', __name__)
@@ -37,3 +41,18 @@ def create_test():
     if request.method == 'POST':
         data = request.get_json()
         return Test().create_test(data)
+    
+    
+@student.route('/recommend', methods=['POST'])
+def recommend():
+    if request.method == 'POST':
+        # Header parameters
+        data = request.get_json()
+        student_id = Student().get_student_id(data['studentName'])
+        test_id = Test().get_test_id(data['testName'])
+        if 'question' in data:
+            question = data['question']
+        else:
+            question = None
+        
+        return make_response(Recommendation().recommend(student_id, test_id, question),200)
