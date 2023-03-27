@@ -17,8 +17,8 @@ class Recommendation:
     def distance(self, vector1, vector2):
         return np.dot(vector1, vector2) / (np.linalg.norm(vector1) * np.linalg.norm(vector2)) 
 
-    def recommend(self, student_id, test_id, question = None):
-        if question == None:	    
+    def recommend(self, student_id, test_id, question = None, answer = None):
+        if question == None and answer == None:	    
             cluster_ids = self.cluster.get_cluster_list()
             randCluster = random.choice(list(cluster_ids))
             randClusterData = self.cluster.get_cluster(randCluster['_id'])
@@ -30,20 +30,25 @@ class Recommendation:
             asked_que_ids = self.askedQue.getQueIds(student_id, test_id)
             cluster_ids = self.cluster.get_cluster_id(Question['_id'])
             distances = []
+            answer_vector = sentence_encoding(answer)
             i=0
             for cluster_id in cluster_ids:
                 median = self.cluster.getMedian(cluster_id)
-                distance = self.distance(Question['vector'], self.QuestionCollection.find_one({'_id': median})['vector'])
+                distance = self.distance(answer_vector, self.QuestionCollection.find_one({'_id': median})['vector'])
                 distances.append({'distance':distance, 'index': cluster_id})
                 i+=1
             distances.sort(key=lambda x: x['distance'])
             for i in range(len(distances)):
                 cluster_id = distances[i]['index']
                 cluster = self.cluster.get_cluster(cluster_id)
-                for que in cluster['que_list']:
-                    if que not in asked_que_ids:
-                        self.askedQue.addQue(student_id, test_id, que, True)
-                        return {'question' : self.QuestionCollection.find_one({'_id': que})['question']}
+                que_list = cluster['que_list']
+                for que in que_list:
+                    if que in asked_que_ids:
+                        que_list.remove(que)
+                if len(que_list) > 0:
+                    randQue = random.choice(que_list)
+                    self.askedQue.addQue(student_id, test_id, randQue, True)
+                    return {'question' : self.QuestionCollection.find_one({'_id': que})['question']}
         all_cluster_ids = list(self.cluster.get_cluster_list())
         for cluster_id in cluster_ids:
             if cluster_id in all_cluster_ids:
