@@ -75,7 +75,7 @@ function StudentDashboard() {
                             {testlist?.enrollments.map((test) => (
                                 <tr>
                                     <td>{test}</td>
-                                    <td><Link to="/start-test/videoRecord" className="btn btn-primary">Start Test</Link></td>
+                                    <td><Link to="/start-test" className="btn btn-primary">Start Test</Link></td>
                                 </tr>
                             ))}
                         </tbody>
