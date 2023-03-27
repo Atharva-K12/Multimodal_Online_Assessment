@@ -15,7 +15,6 @@ class Test:
         return make_response(jsonify({'message': 'Test created successfully'}), 200)
     
     def get_test(self, test_id):
-        print(test_id)
         return self.collection.find_one({'_id':test_id})['Name']
     
     def get_test_id(self, test_name):
@@ -27,4 +26,7 @@ class Test:
         for test in tests:
             test_list.append(test['Name'])
         return test_list
+    
+    def get_max_question(self, test_id):
+        return self.collection.find_one({'_id':test_id})['MaxQuestion']
     
