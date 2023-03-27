@@ -90,8 +90,8 @@ def upload_answer(username):
             data = request.get_json()
             audio_thread = th.Thread(target=audioAnalysis, args=(username, data['testName'], data['question'], data['questionNumber'], file))
             audio_thread.start()
-            output_queue = queue.Queue()
             if data['questionNumber'] == Test().get_max_question(Test().get_test_id(data['testName'])):
+                output_queue = queue.Queue()
                 if 'question' in data:
                     recommend_thread = th.Thread(target=recommendQue, args=(student_id, test_id, output_queue, data['question']))
                 else:
