@@ -1,7 +1,13 @@
-FROM ubuntu:latest
-RUN apt-get update
-COPY . /app
-RUN apt install -y python3
+FROM python:3.9-slim-buster
+
+# set working directory
+WORKDIR /app
+
+# install system dependencies
+RUN apt-get update \
+  && apt-get clean
+
+# add and install requirements
 RUN apt install -y python3-pip
 RUN apt install -y cmake
 RUN apt install -y libsm6
@@ -17,23 +23,7 @@ RUN pip3 install -U sentence-transformers
 RUN pip3 install flask
 RUN pip3 install flask_cors
 RUN pip3 install dlib
+RUN pip3 install pymongo
 
-WORKDIR /app
-RUN git sumbodule init
-RUN cd frontend && npm start
-RUN cd backend && flask run
-
-# RUN ls
-# # run the react app from frontend folder
-# RUN cd frontend && npm install && npm start
-# # run the flask app from backend folder
-
-# EXPOSE 5000
-# RUN cd backend && flask run
-
-
-
-
-
-
-
+# add app
+COPY . .
