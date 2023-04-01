@@ -27,3 +27,6 @@ RUN pip3 install pymongo
 
 # add app
 COPY . .
+
+# run server
+CMD ["python3", "run.py"]
