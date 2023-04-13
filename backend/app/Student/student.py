@@ -73,7 +73,7 @@ def audioAnalysis(student_id, test_id, question, question_number, candidate_answ
     Score().add_score(student_id, test_id, question, question_number, sentence_cosine_score)
 
 
-@student.route('/upload-answer', method=['POST'])
+@student.route('/upload-answer', methods=['POST'])
 @token_validation
 def upload_answer(username):
     if request.method == 'POST':
