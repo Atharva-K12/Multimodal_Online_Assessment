@@ -12,6 +12,7 @@ model_name = 'bert-base-uncased'
 tokenizer = AutoTokenizer.from_pretrained(model_name)
 bert_model = AutoModel.from_pretrained(model_name).to(device)
 
+
 # Load sentence transformer model
 sbert_model = SentenceTransformer('bert-base-nli-mean-tokens').to(device)
 
@@ -20,11 +21,12 @@ with open('sentence.txt', 'r') as f:
     sentences = f.readlines()
 
 # Preprocess sentences using tokenizer
-tokenized_sentences = [tokenizer.encode(sentence, add_special_tokens=True) for sentence in sentences]
+tokenized_sentences = [tokenizer.encode(sentence, add_special_tokens=True,) for sentence in sentences]
 
 # Create dataset and data loader
 dataset = SentencesDataset(tokenized_sentences, sbert_model)
-dataloader = DataLoader(dataset, batch_size=16, shuffle=True)
+dataloader = util.DynamicPaddingDataLoader(dataset, batch_size=16, shuffle=True)
+
 
 # Define optimizer and loss function
 optimizer = AdamW(bert_model.parameters(), lr=2e-5)
