@@ -119,22 +119,14 @@ def video_upload(username):
             if not Enrollment().check_enrollment(student_id, test_id):
                 return make_response(jsonify({'message': 'You are not enrolled in this test'}), 401)
             data = request.get_json()
-            filename = username + '_' + data['testName'] + '_' + str(data['question_number']) + '.mp4'
-            file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
+            filename = username + '_' + data['testName'] + '_' + str(data['serial_number']) + '.mp4'
+            file.save(os.path.join(current_app.config['VIDEO_FOLDER'], filename))
+            video_path = os.path.join(current_app.config['VIDEO_FOLDER'], filename)
+            executor.submit(video_analysis, video_path)
             return make_response(jsonify({'message': 'File uploaded'}), 200)
     
 
 # Pass argument to fucntion using executor.submit(video_analysis)
 def video_analysis(video_path):
-    # Call this function using executor.submit(video_analysis, args) from upload answer function at the end of the test
+    # Call this function using executor.submit(video_analysis, args) from upload video function
     pass
-
-@student.route('/upload', methods=['POST'])
-def video_upload_():
-    if request.method == 'POST':
-        if 'file' not in request.files:
-            return make_response(jsonify({'message': 'No file found'}), 400)
-        file = request.files['file']
-        if file:
-            file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], file.filename))
-            return make_response(jsonify({'message': 'File uploaded'}), 200)
