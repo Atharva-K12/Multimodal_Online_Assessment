@@ -19,6 +19,3 @@ def vectorise_db():
     # return make_response(jsonify({'message': 'Vectorised successfully'}), 200)
 
 
-if __name__ == '__main__':
-    vectorise_db()
-

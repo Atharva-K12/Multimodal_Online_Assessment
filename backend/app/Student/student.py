@@ -12,7 +12,9 @@ from ..middelware import token_validation
 import os
 import threading as th
 import queue
+import concurrent.futures as cf
 
+executor = cf.ThreadPoolExecutor()
 student = Blueprint('student', __name__)
 
 @student.route('/get-student-enrollments', methods=['GET'])
@@ -102,3 +104,37 @@ def upload_answer(username):
             else:
                 audio_thread.join()
                 return make_response(jsonify({'message': 'End of Test'}), 200)
+
+
+@student.route('/video-upload-batch', methods=['POST'])
+@token_validation
+def video_upload(username):
+    if request.method == 'POST':
+        if 'file' not in request.files:
+            return make_response(jsonify({'message': 'No file found'}), 400)
+        file = request.files['file']
+        if file:
+            student_id = Student().get_student_id(username)
+            test_id = Test().get_test_id(data['testName'])
+            if not Enrollment().check_enrollment(student_id, test_id):
+                return make_response(jsonify({'message': 'You are not enrolled in this test'}), 401)
+            data = request.get_json()
+            filename = username + '_' + data['testName'] + '_' + str(data['question_number']) + '.mp4'
+            file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
+            return make_response(jsonify({'message': 'File uploaded'}), 200)
+    
+
+# Pass argument to fucntion using executor.submit(video_analysis)
+def video_analysis(video_path):
+    # Call this function using executor.submit(video_analysis, args) from upload answer function at the end of the test
+    pass
+
+@student.route('/upload', methods=['POST'])
+def video_upload_():
+    if request.method == 'POST':
+        if 'file' not in request.files:
+            return make_response(jsonify({'message': 'No file found'}), 400)
+        file = request.files['file']
+        if file:
+            file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], file.filename))
+            return make_response(jsonify({'message': 'File uploaded'}), 200)
