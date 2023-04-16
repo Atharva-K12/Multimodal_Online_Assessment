@@ -1,6 +1,6 @@
 from flask import Blueprint, request, current_app, make_response, jsonify
 from ..Functionalities.recommendationSystem import Recommendation
-from ..Functionalities.sentenceMatch import sentence_match, sentence_encoding
+from ..Functionalities.sentenceMatch import sentence_match
 from ..Functionalities.whisper import audioToText
 from ..Models.test import Test
 from ..Models.enrollment import Enrollment
@@ -77,7 +77,7 @@ def recommendQue(student_id, test_id, queue, question, answer):
 
 def audioAnalysis(student_id, test_id, question, question_number, candidate_answer):
     modalQuestion = QuestionBank().get_question(question)
-    sentence_cosine_score = sentence_match(modalQuestion['answer'], sentence_encoding(candidate_answer))
+    sentence_cosine_score = sentence_match(modalQuestion['answer'],candidate_answer)
     Score().add_score(student_id, test_id, question, question_number, sentence_cosine_score)
 
 
