@@ -12,6 +12,7 @@ from ..middelware import token_validation
 import os
 import threading as th
 import queue
+import datetime
 import concurrent.futures as cf
 
 executor = cf.ThreadPoolExecutor()
@@ -44,12 +45,17 @@ def enroll(username):
         return Enrollment().enroll(data)
     
 
-@student.route('/create-test', methods=['POST'])
-def create_test():
-    if request.method == 'POST':
-        data = request.get_json()
-        return Test().create_test(data)
-    
+@student.route('/start-test', methods=['GET'])
+@token_validation
+def start_test(username):
+    if request.method == 'GET':
+        test_id = request.args.get('test_id')
+        test = Test().get_test(test_id)
+        if test['last_date'] < datetime.datetime.now():
+            return make_response(jsonify({'message': 'Test expired'}), 401)
+        else :
+            return make_response(jsonify({'message': 'Test started'}), 200)
+
     
 @student.route('/recommend', methods=['POST'])
 @token_validation
