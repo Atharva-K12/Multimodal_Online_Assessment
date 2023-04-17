@@ -44,26 +44,34 @@ def zero_shot_classification(sentence, labels):
     return result
 
 def keyword_extraction(filepath):
-    model = BartForConditionalGeneration.from_pretrained('facebook/bart-large-mnli')
-    tokenizer = AutoTokenizer.from_pretrained('facebook/bart-large-mnli')
+    model = BartForConditionalGeneration.from_pretrained('facebook/bart-large')
+    tokenizer = AutoTokenizer.from_pretrained('facebook/bart-large')
 
     # Open file and read contents
     with open(filepath, 'r') as file:
         contents = file.readlines()
         contents = [x.strip() for x in contents]
+        # concatenate the lines into a single string
+        contents = ''.join(contents)
         print(contents)
 
 
     # Tokenize the sentences and encode them for the model
     encoded = tokenizer.batch_encode_plus([contents], return_tensors='pt', padding=True)
-
+    print("\n\n\n\n\n\n\n")
+    print(encoded['input_ids'])
     # Generate keywords using the model's output
-    summary_ids = model.generate(encoded['input_ids'], num_beams=4, length_penalty=2.0, min_length=5, max_length=20, early_stopping=True)
-    keywords = tokenizer.decode(summary_ids.squeeze(), skip_special_tokens=True)
+    summary_ids = model.generate(encoded['input_ids'])#, num_beams=4, length_penalty=2.0, min_length=5, max_length=20, early_stopping=True)
+    print("\n\n\n\n\n\n\n")
+    print(summary_ids)
+    print(summary_ids.shape)
+    for i in range (summary_ids.shape[0]):
+        print(tokenizer.decode(summary_ids[i], skip_special_tokens=True))
+    # keywords = tokenizer.decode(summary_ids, skip_special_tokens=True)
 
     # Print the generated keywords
-    print(keywords)
-    return keywords
+    # print(keywords)
+    # return keywords
 
 if __name__ == "__main__":
     sentence1 = "I am a good person"

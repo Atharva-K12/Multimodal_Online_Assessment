@@ -1,0 +1,15 @@
+
+A class is a blueprint or a template for creating objects that encapsulate data and the functions that operate on that data. It defines the properties and behavior of objects, including their state and methods. The class is a user-defined data type that provides a way to group related data and functions together, making it easier to organize and maintain complex code.
+
+A class is a user-defined data type in C++ that defines a set of attributes and methods for a particular type of object. Attributes represent the data that the object contains, while methods represent the actions that the object can perform. A class serves as a blueprint for creating instances of that object, also known as objects or instances of the class. Classes can be used to implement object-oriented programming concepts, such as inheritance, polymorphism, and encapsulation.
+
+A class is a user-defined data type that allows the programmer to define their own data structures, including not only the data type of each member but also the methods that operate on that data. The class serves as a template for creating objects, which are instances of the class. Each object of a class has its own copy of the class's data members and can call the methods of the class to manipulate its data. Classes in C++ provide a way to group related data and behavior together, making it easy
+
+2
+The teacher was pleased with the performance of her students, as they had all excelled in the exam.
+The instructor was satisfied with the achievement of his pupils, as they had all surpassed expectations in the test.
+The professor was impressed with the aptitude of her students, as they had all demonstrated exceptional skill in their research projects.
+3
+The algorithm employs a heuristic approach to solve the problem by making informed guesses based on prior knowledge.
+The algorithm uses a rule-of-thumb method to resolve the issue by making educated estimations based on previous experience.
+The program utilizes a self-referential method to calculate the factorial of a specified value by iteratively invoking itself until the termination condition is met.
