@@ -1,5 +1,5 @@
 from sentence_transformers import SentenceTransformer, util
-from transfomers import AutoTokenizer, AutoModelForSequenceClassification, pipeline, BartForConditionalGeneration
+from transformers import BartTokenizer,BartModel, AutoTokenizer, AutoModelForSequenceClassification, pipeline, BartForConditionalGeneration
 import torch
 
 # def sentence_encoding(sentence):
@@ -15,7 +15,14 @@ import torch
 
 #     return cosine_scores.item()
 def sentence_encoding(sentence):
-    pass
+    tokenizer = BartTokenizer.from_pretrained('facebook/bart-large')
+    model = BartModel.from_pretrained('facebook/bart-large')
+
+    inputs = tokenizer("Hello, my dog is cute", return_tensors="pt")
+    embeddings = model.encoder(inputs['input_ids'])
+
+    last_hidden_states = model(**inputs)[0]
+    return embeddings
     
 
 def sentence_match(sentence1, sentence2):
@@ -41,8 +48,11 @@ def keyword_extraction(filepath):
     tokenizer = AutoTokenizer.from_pretrained('facebook/bart-large-mnli')
 
     # Open file and read contents
-    with open('sentences.txt', 'r') as file:
-        contents = file.read()
+    with open(filepath, 'r') as file:
+        contents = file.readlines()
+        contents = [x.strip() for x in contents]
+        print(contents)
+
 
     # Tokenize the sentences and encode them for the model
     encoded = tokenizer.batch_encode_plus([contents], return_tensors='pt', padding=True)
@@ -55,5 +65,10 @@ def keyword_extraction(filepath):
     print(keywords)
     return keywords
 
-
+if __name__ == "__main__":
+    sentence1 = "I am a good person"
+    sentence2 = "I am a bad person"
+    # print(sentence_match(sentence1, sentence2))
+    # print(zero_shot_classification(sentence1, ["good", "bad"]))
+    print(keyword_extraction("sentence.txt"))
 
