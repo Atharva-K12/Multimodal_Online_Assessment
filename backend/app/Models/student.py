@@ -1,6 +1,7 @@
 from pymongo import MongoClient
 from flask import current_app
 from flask import make_response, jsonify
+import os
 
 class Student:
     def __init__(self):
@@ -24,4 +25,5 @@ class Student:
         if self.collection.find_one({'username':data['username']}):
             return make_response(jsonify({'message': 'Username already exists'}, 401))
         self.collection.insert_one(data)
+        os.mkdir(os.path.join(current_app.config['AUDIO_FILES'], data['username']))
         return make_response(jsonify({'message': 'Student registered successfully'}), 200)

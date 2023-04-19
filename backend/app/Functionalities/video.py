@@ -8,6 +8,7 @@ from imutils.video import VideoStream
 from imutils import face_utils
 import imutils
 
+
 def face_detect(video_path):
     cam = cv2.VideoCapture(video_path)
     fps = cam.get(cv2.CAP_PROP_FPS)
