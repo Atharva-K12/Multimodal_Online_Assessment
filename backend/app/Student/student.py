@@ -2,6 +2,7 @@ from flask import Blueprint, request, current_app, make_response, jsonify
 from ..Functionalities.recommendationSystem import Recommendation
 from ..Functionalities.sentenceMatch import sentence_match
 from ..Functionalities.whisper import audioToText
+from ..Functionalities.video import video_analysis
 from ..Models.test import Test
 from ..Models.enrollment import Enrollment
 from ..Models.student import Student
@@ -95,8 +96,8 @@ def upload_answer(username):
                 return make_response(jsonify({'message': 'You are not enrolled in this test'}), 401)
             data = request.get_json()
             filename = username + '_' + data['testName'] + '_' + str(data['question_number']) + '.mp3'
-            file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
-            candidate_answer = audioToText(os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
+            file.save(os.path.join(current_app.config['AUDIO_FOLDER'], username ,filename))
+            candidate_answer = audioToText(os.path.join(current_app.config['AUDIO_FOLDER'], username, filename))
             audio_thread = th.Thread(target=audioAnalysis, args=(student_id, test_id, data['question'], data['questionNumber'], candidate_answer))
             audio_thread.start()
             if data['questionNumber'] == Test().get_max_question(Test().get_test_id(data['testName'])):
@@ -128,11 +129,13 @@ def video_upload(username):
             filename = username + '_' + data['testName'] + '_' + str(data['serial_number']) + '.mp4'
             file.save(os.path.join(current_app.config['VIDEO_FOLDER'], filename))
             video_path = os.path.join(current_app.config['VIDEO_FOLDER'], filename)
-            executor.submit(video_analysis, video_path)
+            executor.submit(video_analysis_function, video_path, username, test_id)
             return make_response(jsonify({'message': 'File uploaded'}), 200)
     
 
 # Pass argument to fucntion using executor.submit(video_analysis)
-def video_analysis(video_path):
-    # Call this function using executor.submit(video_analysis, args) from upload video function
-    pass
+def video_analysis_function(video_path, username, test_id):
+    scores = video_analysis(video_path)
+    student_id = Student().get_student_id(username)
+    Score().update_negative_score(student_id, test_id, scores)
+

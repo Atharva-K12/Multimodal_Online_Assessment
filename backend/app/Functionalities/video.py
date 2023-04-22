@@ -11,6 +11,7 @@ from gaze_tracking import GazeTracking
 import mediapipe as mp
 import numpy as np
 
+
 def face_detect(video_path):
     cam = cv2.VideoCapture(video_path)
     fps = cam.get(cv2.CAP_PROP_FPS)
