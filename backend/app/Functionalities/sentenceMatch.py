@@ -74,10 +74,10 @@ def keyword_extraction(filepath):
     # print(keywords)
     # return keywords
 
-if __name__ == "__main__":
-    sentence1 = "I am a good person"
-    sentence2 = "I am a bad person"
-    # print(sentence_match(sentence1, sentence2))
-    # print(zero_shot_classification(sentence1, ["good", "bad"]))
-    print(keyword_extraction("sentence.txt"))
+# if __name__ == "__main__":
+#     sentence1 = "I am a good person"
+#     sentence2 = "I am a bad person"
+#     # print(sentence_match(sentence1, sentence2))
+#     # print(zero_shot_classification(sentence1, ["good", "bad"]))
+#     print(keyword_extraction("sentence.txt"))
 
