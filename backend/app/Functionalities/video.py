@@ -7,6 +7,9 @@ from imutils.video import FileVideoStream
 from imutils.video import VideoStream
 from imutils import face_utils
 import imutils
+from gaze_tracking import GazeTracking
+import mediapipe as mp
+import numpy as np
 
 
 def face_detect(video_path):
@@ -27,7 +30,7 @@ def face_detect(video_path):
     cam.release()
     return frame_count
         
-
+'''
 def eye_aspect_ratio(eye):
 	# compute the euclidean distances between the two sets of
 	# vertical eye landmarks (x, y)-coordinates
@@ -101,12 +104,106 @@ def eye_blink_detect(filepath):
                 # reset the eye frame counter
                 COUNTER = 0
     return blink
+'''
 
-def headpose_detect(img):
+def headpose_detect(video_path):
+    mp_face_mesh = mp.solutions.face_mesh
+    face_mesh = mp_face_mesh.FaceMesh(min_detection_confidence=0.5, min_tracking_confidence=0.5)
+    cap = cv2.VideoCapture(video_path)
+    result = dict()
+    for key in ['left', 'right', 'center', 'down', 'up']:
+        result[key] = 0
+
+    while cap.isOpened():
+        _, image = cap.read()
+
+        image = cv2.cvtColor(cv2.flip(image, 1), cv2.COLOR_BGR2RGB)
+
+        image.flags.writeable = False
+        
+        results = face_mesh.process(image)
+
+        image.flags.writeable = True
+        
+        image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+
+        img_h, img_w, img_c = image.shape
+        face_3d = []
+        face_2d = []
+
+        if results.multi_face_landmarks:
+            for face_landmarks in results.multi_face_landmarks:
+                for idx, lm in enumerate(face_landmarks.landmark):
+                    if idx == 33 or idx == 263 or idx == 1 or idx == 61 or idx == 291 or idx == 199:
+                        if idx == 1:
+                            nose_2d = (lm.x * img_w, lm.y * img_h)
+                            nose_3d = (lm.x * img_w, lm.y * img_h, lm.z * 8000)
+
+                        x, y = int(lm.x * img_w), int(lm.y * img_h)
+
+                        face_2d.append([x, y])
+
+                        face_3d.append([x, y, lm.z])       
+                
+                face_2d = np.array(face_2d, dtype=np.float64)
+                face_3d = np.array(face_3d, dtype=np.float64)
+
+                focal_length = 1 * img_w
+
+                cam_matrix = np.array([ [focal_length, 0, img_h / 2],
+                                        [0, focal_length, img_w / 2],
+                                        [0, 0, 1]])
+
+                dist_matrix = np.zeros((4, 1), dtype=np.float64)
+
+                success, rot_vec, trans_vec = cv2.solvePnP(face_3d, face_2d, cam_matrix, dist_matrix)
+
+                rmat, jac = cv2.Rodrigues(rot_vec)
+
+                angles, mtxR, mtxQ, Qx, Qy, Qz = cv2.RQDecomp3x3(rmat)
+
+                x = angles[0] * 360
+                y = angles[1] * 360
+
+                if y < -10:
+                    result['left'] += 1
+                elif y > 10:
+                    result['right'] += 1
+                elif x < -10:
+                    result['down'] += 1
+                else:
+                    result['centre'] += 1
+    cap.release()
+    
     return 0
 
-def gaze_tracking(img):
-    return 0
+def gaze_tracking(video_path):
+    gaze = GazeTracking()
+    webcam = cv2.VideoCapture(video_path)
+    result = dict()
+    
+    for key in ['left', 'right', 'center', 'blink']:
+        result[key] = 0
+
+    while webcam.isOpened():
+        _, frame = webcam.read()
+
+        gaze.refresh(frame)
+
+        frame = gaze.annotated_frame()
+
+        if gaze.is_blinking():
+            result['blink'] += 1
+        elif gaze.is_right():
+            result['right'] += 1
+        elif gaze.is_left():
+            result['left'] += 1
+        elif gaze.is_center():
+            result['center'] += 1
+ 
+    webcam.release()     
+    return result
+            
 
 # Perform all malpractice checks for video analysis
 def video_analysis(video_path):
@@ -115,7 +212,9 @@ def video_analysis(video_path):
     for key in keys:
         scores[key] = None
     scores['face'] = face_detect(video_path)
-    scores['blink'] = eye_blink_detect(video_path)
+    #scores['blink'] = eye_blink_detect(video_path)
+    scores['gaze'] = gaze_tracking(video_path)
+    scores['headpose'] = headpose_detect(video_path)
 
     return scores
         
