@@ -2,6 +2,8 @@ from flask import Blueprint, request, current_app, make_response, jsonify
 from ..Models.test import Test
 from ..Models.teacher import Teacher
 from ..middelware import token_validation
+from ..Functionalities.questionsUpload import questionUpload
+from ..Functionalities.clusterData import ClusterData
 import concurrent.futures as cf
 import os
 
@@ -9,8 +11,9 @@ executor = cf.ThreadPoolExecutor()
 teacher = Blueprint('teacher', __name__)
 
 def test_file_upload(filepath):
-    # Upload file to database
-    pass
+    questionUpload(filepath)
+    ClusterData().createCluster()
+    
 
 @teacher.route('/create-test', methods=['POST'])
 @token_validation

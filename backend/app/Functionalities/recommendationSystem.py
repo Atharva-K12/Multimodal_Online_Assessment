@@ -1,4 +1,4 @@
-from ..Functionalities.sentenceMatch import sentence_encoding
+from ..Functionalities.sentenceMatch import sentence_match
 from ..Models.cluster import Cluster
 from ..Models.askedQue import AskedQue
 import random
@@ -14,9 +14,6 @@ class Recommendation:
         self.db = self.client['fyp']
         self.QuestionCollection = self.db['questionBank']
 
-    def distance(self, vector1, vector2):
-        return np.dot(vector1, vector2) / (np.linalg.norm(vector1) * np.linalg.norm(vector2)) 
-
     def recommend(self, student_id, test_id, question = None, answer = None):
         if question == None and answer == None:	    
             cluster_ids = self.cluster.get_cluster_list()
@@ -30,11 +27,10 @@ class Recommendation:
             asked_que_ids = self.askedQue.getQueIds(student_id, test_id)
             cluster_ids = self.cluster.get_cluster_id(Question['_id'])
             distances = []
-            answer_vector = sentence_encoding(answer)
             i=0
             for cluster_id in cluster_ids:
                 median = self.cluster.getMedian(cluster_id)
-                distance = self.distance(answer_vector, self.QuestionCollection.find_one({'_id': median})['vector'])
+                distance = sentence_match(answer, self.QuestionCollection.find_one({'_id': median})['question'])
                 distances.append({'distance':distance, 'index': cluster_id})
                 i+=1
             distances.sort(key=lambda x: x['distance'])

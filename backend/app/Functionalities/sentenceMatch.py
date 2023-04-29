@@ -14,6 +14,7 @@ import torch
 #     cosine_scores = util.pytorch_cos_sim(embedding1, embedding2)
 
 #     return cosine_scores.item()
+
 def sentence_encoding(sentence):
     tokenizer = BartTokenizer.from_pretrained('facebook/bart-large')
     model = BartModel.from_pretrained('facebook/bart-large')
