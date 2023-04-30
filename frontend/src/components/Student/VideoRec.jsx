@@ -3,6 +3,20 @@ import VideoRecorder from 'react-video-recorder'
 
 function VideoRec() {
 
+  const submitVideo = (videoFile) => {
+    const formData = new FormData();
+		formData.append('file', videoFile);
+    fetch('http://localhost:5000/upload', {
+      method: 'POST',
+      body: formData
+    })
+    .then(response => response.json())
+    .then((data) => {
+      console.log('Success:', data);
+      })
+    .catch(error => console.error('Error:', error))
+  }
+
   return (
     <div style={{ width: "100%", maxWidth: 1000, height: 500 , margin: "auto"}}>
       <h1 style={{textAlign: 'center'}}>Test Window</h1>
@@ -10,7 +24,10 @@ function VideoRec() {
         isFlipped={false}
         countdownTime={0}
         mimeType="video/webm;codecs=vp8,opus"
-        onStartRecording={() => console.log('started recording')}
+        onStartRecording={() => {
+          // call API for question
+          console.log('started recording')
+        }}
         constraints={{
           audio: true,
           video: {
@@ -22,8 +39,10 @@ function VideoRec() {
         }}
         
         onRecordingComplete={(videoBlob) => {
-          // Do something with the video...
-          console.log('videoBlob', videoBlob)
+          const videoFile = new File([videoBlob], "video.mp4", {
+            type: "video/mp4"
+          });
+          submitVideo(videoFile);        
         }}
       />
     </div>
