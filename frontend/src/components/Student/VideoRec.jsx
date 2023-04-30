@@ -8,7 +8,7 @@ function VideoRec() {
   const submitVideo = (videoFile) => {
     const formData = new FormData();
 		formData.append('file', videoFile);
-    fetch('http://localhost:5000/upload', {
+    fetch('http://localhost:5000/video-upload', {
       method: 'POST',
       body: formData
     })

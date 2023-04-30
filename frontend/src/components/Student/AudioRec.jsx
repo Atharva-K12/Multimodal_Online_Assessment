@@ -4,6 +4,24 @@ import vmsg from "vmsg";
 const recorder = new vmsg.Recorder({
   wasmURL: "https://unpkg.com/vmsg@0.3.0/vmsg.wasm"
 });
+
+const sendData = (audioFile) => {
+  const url = 'http://localhost:5000/upload-answer'
+  const formData = new FormData();
+  formData.append('file', audioFile);
+  fetch(url, {
+    method: 'POST',
+    body: {
+      question_id: 1,
+      file:formData
+    }
+    .then(response => response.json())
+    .then((data) => {
+      return data.question
+    })
+    .catch(error => console.error('Error:', error))
+  })
+}
  
 class AudioRec extends React.Component {
   state = {
@@ -21,6 +39,7 @@ class AudioRec extends React.Component {
         isRecording: false,
         recordings: this.state.recordings.concat(URL.createObjectURL(blob))
       });
+      sendData(blob);
     } else {
       try {
         await recorder.initAudio();
@@ -36,6 +55,8 @@ class AudioRec extends React.Component {
   render() {
     const { isLoading, isRecording, recordings } = this.state;
     return (
+      <div>
+      {/* <h4>What is constructor?</h4> */}
       <React.Fragment>
         <button disabled={isLoading} onClick={this.record}>
           {isRecording ? "Stop" : "Record"}
@@ -48,6 +69,7 @@ class AudioRec extends React.Component {
           ))}
         </ul>
       </React.Fragment>
+      </div>
     );
   }
 }
