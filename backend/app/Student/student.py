@@ -87,7 +87,13 @@ def audioAnalysis(student_id, test_id, question, question_number, candidate_answ
 def upload_answer(username):
     if request.method == 'POST':
         if 'file' not in request.files:
-            return make_response(jsonify({'message': 'No file found'}), 400)
+            data = request.get_json()
+            student_id = Student().get_student_id(data['studentName'])
+            test_id = Test().get_test_id(data['testName'])
+            if not Enrollment().check_enrollment(student_id, test_id):
+                return make_response(jsonify({'message': 'You are not enrolled in this test'}), 401)  
+            question = Recommendation().recommend(student_id, test_id, None, None)  
+            return make_response(jsonify({'question': question['question'], 'questionNumber': 1}),200)
         file = request.files['file']
         if file:
             student_id = Student().get_student_id(username)
@@ -113,7 +119,7 @@ def upload_answer(username):
                 return make_response(jsonify({'message': 'End of Test'}), 200)
 
 
-@student.route('/video-upload-batch', methods=['POST'])
+@student.route('/video-upload', methods=['POST'])
 @token_validation
 def video_upload(username):
     if request.method == 'POST':
