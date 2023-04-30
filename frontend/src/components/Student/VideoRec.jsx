@@ -1,5 +1,7 @@
 import React from 'react';
 import VideoRecorder from 'react-video-recorder'
+import AudioRec from './AudioRec';
+
 
 function VideoRec() {
 
@@ -20,6 +22,7 @@ function VideoRec() {
   return (
     <div style={{ width: "100%", maxWidth: 1000, height: 500 , margin: "auto"}}>
       <h1 style={{textAlign: 'center'}}>Test Window</h1>
+      <AudioRec/>
       <VideoRecorder 
         isFlipped={false}
         countdownTime={0}
@@ -44,7 +47,7 @@ function VideoRec() {
           });
           submitVideo(videoFile);        
         }}
-      />
+      />  
     </div>
   );
 }
