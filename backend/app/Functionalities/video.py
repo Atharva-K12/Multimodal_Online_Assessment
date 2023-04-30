@@ -2,12 +2,12 @@ import cv2
 import matplotlib.pyplot as plt
 import face_detection
 from scipy.spatial import distance as dist
-import dlib
+# import dlib
 from imutils.video import FileVideoStream
 from imutils.video import VideoStream
 from imutils import face_utils
 import imutils
-from gaze_tracking import GazeTracking
+from .gaze_tracking import GazeTracking
 import mediapipe as mp
 import numpy as np
 

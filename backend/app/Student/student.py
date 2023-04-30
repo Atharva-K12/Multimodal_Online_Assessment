@@ -113,7 +113,7 @@ def upload_answer(username):
                 return make_response(jsonify({'message': 'End of Test'}), 200)
 
 
-@student.route('/video-upload-batch', methods=['POST'])
+@student.route('/video-upload', methods=['POST'])
 @token_validation
 def video_upload(username):
     if request.method == 'POST':
