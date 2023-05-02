@@ -19,6 +19,12 @@ class Enrollment:
         for test in tests:
             test_list.append(Test().get_test(test['test_id']))
         return test_list
+    
+    def check_enrollment(self, student_id, test_id):
+        if self.collection.find_one({'student_id':student_id, 'test_id':test_id}):
+            return True
+        else:
+            return False
 
     def enroll(self, data):
         test_id = Test().get_test_id(data['test_name'])

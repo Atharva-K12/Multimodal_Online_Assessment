@@ -3,13 +3,21 @@ import VideoRecorder from 'react-video-recorder'
 import AudioRec from './AudioRec';
 
 
-function VideoRec() {
+function VideoRec(props) {
 
   const submitVideo = (videoFile) => {
+    // console.log(videoFile)
+    // console.log(props.testName)
     const formData = new FormData();
 		formData.append('file', videoFile);
+    formData.append('testName', props.testName);
+    console.log(formData.get('testName'), formData.get('file'))
     fetch('http://localhost:5000/video-upload', {
       method: 'POST',
+      headers: {
+        //'content-type': 'multipart/form-data',
+        'Authorization': localStorage.getItem('token')
+      },
       body: formData
     })
     .then(response => response.json())
@@ -22,7 +30,8 @@ function VideoRec() {
   return (
     <div style={{ width: "100%", maxWidth: 1000, height: 500 , margin: "auto"}}>
       <h1 style={{textAlign: 'center'}}>Test Window</h1>
-      <AudioRec/>
+      <h2>{props.testName}</h2>
+      <AudioRec testName = {props.testName}/>
       <VideoRecorder 
         isFlipped={false}
         countdownTime={0}

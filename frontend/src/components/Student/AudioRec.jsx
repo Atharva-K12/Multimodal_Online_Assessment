@@ -56,6 +56,7 @@ class AudioRec extends React.Component {
     const { isLoading, isRecording, recordings } = this.state;
     return (
       <div>
+        {/* <h2>{this.props.testName}</h2> */}
       {/* <h4>What is constructor?</h4> */}
       <React.Fragment>
         <button disabled={isLoading} onClick={this.record}>

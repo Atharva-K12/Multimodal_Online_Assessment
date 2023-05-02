@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useState} from "react";
 import {
   BrowserRouter as Router,
   Switch,
@@ -19,6 +19,7 @@ import {
 
 export default function App() {
   const location = 'http://127.0.0.1:5000'
+  const [testName, setTestName] = useState('')
 
   return (
     <div>
@@ -30,8 +31,8 @@ export default function App() {
           <Route path = "/student-register" render={() => <StudentRegister location = {location} />} />
           <Route path = "/admin-dashboard" render={() => <AdminDashboard location = {location} />} />
           <Route path = "/teacher-register" render={() => <TeacherRegister location = {location} />} />
-          <Route path = "/student-dashboard" render={() => <StudentDashboard location = {location} />} />
-          <Route path = "/start-test" render={() => <VideoRec location={location} />} />
+          <Route path = "/student-dashboard" render={() => <StudentDashboard location = {location} testName={testName} setTestName={setTestName} />} />
+          <Route path = "/start-test" render={() => <VideoRec location={location} testName={testName} setTestName={setTestName}/>} />
           <Route path = "/" render={() => <FrontPage />} />
         </Switch>
       </Router>

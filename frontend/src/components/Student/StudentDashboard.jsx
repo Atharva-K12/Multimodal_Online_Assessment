@@ -3,7 +3,7 @@ import Title from './Title'
 import avatar from "./images/avatar.png"
 import { Link, useHistory, Redirect } from 'react-router-dom'
 
-function StudentDashboard() {
+function StudentDashboard(props) {
 
     let history = useHistory()
 
@@ -33,6 +33,11 @@ function StudentDashboard() {
 
     const mystyle={
         maxWidth: "540px",
+    }
+
+    const handleTestName = (test) =>{
+        console.log(test)
+        props.setTestName(test)
     }
 
     if(!localStorage.getItem('token')){
@@ -75,7 +80,7 @@ function StudentDashboard() {
                             {testlist?.enrollments.map((test) => (
                                 <tr>
                                     <td>{test}</td>
-                                    <td><Link to="/start-test" className="btn btn-primary">Start Test</Link></td>
+                                    <td><Link onClick={()=>handleTestName(test)} to="/start-test" className="btn btn-primary">Start Test</Link></td>
                                 </tr>
                             ))}
                         </tbody>

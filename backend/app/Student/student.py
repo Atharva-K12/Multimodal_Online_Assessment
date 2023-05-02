@@ -41,7 +41,7 @@ def get_all_test(username):
 @token_validation
 def enroll(username):
     if request.method == 'POST':
-        data = request.get_json()
+        data = request.form
         data['student_name'] = username
         return Enrollment().enroll(data)
     
@@ -63,7 +63,7 @@ def start_test(username):
 def recommend(username):
     if request.method == 'POST':
         # Header parameters
-        data = request.get_json()
+        data = request.form
         student_id = Student().get_student_id(data['studentName'])
         test_id = Test().get_test_id(data['testName'])
         if not Enrollment().check_enrollment(student_id, test_id):
@@ -87,8 +87,8 @@ def audioAnalysis(student_id, test_id, question, question_number, candidate_answ
 def upload_answer(username):
     if request.method == 'POST':
         if 'file' not in request.files:
-            data = request.get_json()
-            student_id = Student().get_student_id(data['studentName'])
+            data = request.form
+            student_id = Student().get_student_id(username)
             test_id = Test().get_test_id(data['testName'])
             if not Enrollment().check_enrollment(student_id, test_id):
                 return make_response(jsonify({'message': 'You are not enrolled in this test'}), 401)  
@@ -96,11 +96,11 @@ def upload_answer(username):
             return make_response(jsonify({'question': question['question'], 'questionNumber': 1}),200)
         file = request.files['file']
         if file:
+            data = request.get_json()
             student_id = Student().get_student_id(username)
             test_id = Test().get_test_id(data['testName'])
             if not Enrollment().check_enrollment(student_id, test_id):
                 return make_response(jsonify({'message': 'You are not enrolled in this test'}), 401)
-            data = request.get_json()
             filename = username + '_' + data['testName'] + '_' + str(data['question_number']) + '.mp3'
             file.save(os.path.join(current_app.config['AUDIO_FOLDER'], username ,filename))
             candidate_answer = audioToText(os.path.join(current_app.config['AUDIO_FOLDER'], username, filename))
@@ -122,22 +122,25 @@ def upload_answer(username):
 @student.route('/video-upload', methods=['POST'])
 @token_validation
 def video_upload(username):
+    print(request)
     if request.method == 'POST':
+        print(request.files)
+        print("form" , request.form)
         if 'file' not in request.files:
+            print(request.form['testName'])
             return make_response(jsonify({'message': 'No file found'}), 400)
         file = request.files['file']
         if file:
+            data = request.form
             student_id = Student().get_student_id(username)
             test_id = Test().get_test_id(data['testName'])
             if not Enrollment().check_enrollment(student_id, test_id):
                 return make_response(jsonify({'message': 'You are not enrolled in this test'}), 401)
-            data = request.get_json()
-            filename = username + '_' + data['testName'] + '_' + str(data['serial_number']) + '.mp4'
+            filename = username + '_' + data['testName'] + '.mp4'
             file.save(os.path.join(current_app.config['VIDEO_FOLDER'], filename))
             video_path = os.path.join(current_app.config['VIDEO_FOLDER'], filename)
             executor.submit(video_analysis_function, video_path, username, test_id)
             return make_response(jsonify({'message': 'File uploaded'}), 200)
-    
 
 # Pass argument to fucntion using executor.submit(video_analysis)
 def video_analysis_function(video_path, username, test_id):
