@@ -7,7 +7,7 @@ from imutils.video import FileVideoStream
 from imutils.video import VideoStream
 from imutils import face_utils
 import imutils
-from .gaze_tracking import GazeTracking
+# from .gaze_tracking import GazeTracking
 import mediapipe as mp
 import numpy as np
 
@@ -177,32 +177,32 @@ def headpose_detect(video_path):
     
     return 0
 
-def gaze_tracking(video_path):
-    gaze = GazeTracking()
-    webcam = cv2.VideoCapture(video_path)
-    result = dict()
+# def gaze_tracking(video_path):
+#     gaze = GazeTracking()
+#     webcam = cv2.VideoCapture(video_path)
+#     result = dict()
     
-    for key in ['left', 'right', 'center', 'blink']:
-        result[key] = 0
+#     for key in ['left', 'right', 'center', 'blink']:
+#         result[key] = 0
 
-    while webcam.isOpened():
-        _, frame = webcam.read()
+#     while webcam.isOpened():
+#         _, frame = webcam.read()
 
-        gaze.refresh(frame)
+#         gaze.refresh(frame)
 
-        frame = gaze.annotated_frame()
+#         frame = gaze.annotated_frame()
 
-        if gaze.is_blinking():
-            result['blink'] += 1
-        elif gaze.is_right():
-            result['right'] += 1
-        elif gaze.is_left():
-            result['left'] += 1
-        elif gaze.is_center():
-            result['center'] += 1
+#         if gaze.is_blinking():
+#             result['blink'] += 1
+#         elif gaze.is_right():
+#             result['right'] += 1
+#         elif gaze.is_left():
+#             result['left'] += 1
+#         elif gaze.is_center():
+#             result['center'] += 1
  
-    webcam.release()     
-    return result
+#     webcam.release()     
+#     return result
             
 
 # Perform all malpractice checks for video analysis
@@ -213,10 +213,10 @@ def video_analysis(video_path):
         scores[key] = None
     scores['face'] = face_detect(video_path)
     #scores['blink'] = eye_blink_detect(video_path)
-    scores['gaze'] = gaze_tracking(video_path)
+    # scores['gaze'] = gaze_tracking(video_path)
     scores['headpose'] = headpose_detect(video_path)
 
     return scores
         
         
-video_analysis('APlusBsquare.mp4')
+# video_analysis('APlusBsquare.mp4')
