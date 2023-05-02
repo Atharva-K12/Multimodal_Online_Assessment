@@ -85,6 +85,8 @@ def audioAnalysis(student_id, test_id, question, question_number, candidate_answ
 @student.route('/upload-answer', methods=['POST'])
 @token_validation
 def upload_answer(username):
+    print(request.files)
+    print(request.form)
     if request.method == 'POST':
         if 'file' not in request.files:
             data = request.form
@@ -96,7 +98,7 @@ def upload_answer(username):
             return make_response(jsonify({'question': question['question'], 'questionNumber': 1}),200)
         file = request.files['file']
         if file:
-            data = request.get_json()
+            data = request.form
             student_id = Student().get_student_id(username)
             test_id = Test().get_test_id(data['testName'])
             if not Enrollment().check_enrollment(student_id, test_id):
@@ -122,10 +124,7 @@ def upload_answer(username):
 @student.route('/video-upload', methods=['POST'])
 @token_validation
 def video_upload(username):
-    print(request)
     if request.method == 'POST':
-        print(request.files)
-        print("form" , request.form)
         if 'file' not in request.files:
             print(request.form['testName'])
             return make_response(jsonify({'message': 'No file found'}), 400)

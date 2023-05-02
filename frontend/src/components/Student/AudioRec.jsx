@@ -5,22 +5,31 @@ const recorder = new vmsg.Recorder({
   wasmURL: "https://unpkg.com/vmsg@0.3.0/vmsg.wasm"
 });
 
-const sendData = (audioFile) => {
+const sendData = (audioBlob, testName) => {
+  const audioFile = new File([audioBlob], "audio.mp3", {
+    type: "audio/mpeg"
+  })
+
   const url = 'http://localhost:5000/upload-answer'
   const formData = new FormData();
   formData.append('file', audioFile);
+  formData.append('testName', testName);
+  formData.append('question', 'What is constructor?');
+  formData.append('question_number', 1);
   fetch(url, {
     method: 'POST',
-    body: {
-      question_id: 1,
-      file:formData
-    }
+    headers: {
+      //'content-type': 'multipart/form-data',
+      'Authorization': localStorage.getItem('token')
+    },
+    body: formData
+  })
     .then(response => response.json())
     .then((data) => {
+      console.log('Success:', data)
       return data.question
     })
     .catch(error => console.error('Error:', error))
-  })
 }
  
 class AudioRec extends React.Component {
@@ -39,7 +48,7 @@ class AudioRec extends React.Component {
         isRecording: false,
         recordings: this.state.recordings.concat(URL.createObjectURL(blob))
       });
-      sendData(blob);
+      sendData(blob, this.props.testName);
     } else {
       try {
         await recorder.initAudio();
