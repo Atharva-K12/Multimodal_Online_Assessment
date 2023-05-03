@@ -5,7 +5,7 @@ const recorder = new vmsg.Recorder({
   wasmURL: "https://unpkg.com/vmsg@0.3.0/vmsg.wasm"
 });
 
-const sendData = (audioBlob, testName) => {
+const sendData = (audioBlob, testName, questionNumber) => {
   const audioFile = new File([audioBlob], "audio.mp3", {
     type: "audio/mpeg"
   })
@@ -14,6 +14,7 @@ const sendData = (audioBlob, testName) => {
   const formData = new FormData();
   formData.append('file', audioFile);
   formData.append('testName', testName);
+  formData.append('questionNumber', questionNumber);
   formData.append('question', 'What is constructor?');
   formData.append('question_number', 1);
   fetch(url, {
@@ -27,7 +28,7 @@ const sendData = (audioBlob, testName) => {
     .then(response => response.json())
     .then((data) => {
       console.log('Success:', data)
-      return data.question
+      return data
     })
     .catch(error => console.error('Error:', error))
 }
@@ -37,7 +38,8 @@ class AudioRec extends React.Component {
     isLoading: false,
     isRecording: false,
     recordings: [],
-    question: ''
+    question: '',
+    questionNumber: 1
   };
   record = async () => {
     this.setState({ isLoading: true });
@@ -50,7 +52,10 @@ class AudioRec extends React.Component {
         recordings: this.state.recordings.concat(URL.createObjectURL(blob))
       });
       let question = sendData(blob, this.props.testName);
-      this.setState({question: question})
+      this.setState({
+        question: question.question,
+        questionNumber: question.questionNumber
+      })
     } else {
       try {
         await recorder.initAudio();
@@ -79,13 +84,16 @@ class AudioRec extends React.Component {
     .then(response => response.json())
     .then((data) => {
       console.log('Success:', data)
-      this.setState({question:data.question})
+      this.setState({
+        question:data.question,
+        questionNumber: data.questionNumber
+      })
     })
     .catch(error => console.error('Error:', error))
   }
 
   render() {
-    const { isLoading, isRecording, recordings, question } = this.state;
+    const { isLoading, isRecording, recordings, question, questionNumber } = this.state;
     return (
       <div>
       {isRecording ? <h2>
