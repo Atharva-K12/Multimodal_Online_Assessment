@@ -85,8 +85,6 @@ def audioAnalysis(student_id, test_id, question, question_number, candidate_answ
 @student.route('/upload-answer', methods=['POST'])
 @token_validation
 def upload_answer(username):
-    print(request.files)
-    print(request.form)
     if request.method == 'POST':
         if 'file' not in request.files:
             data = request.form

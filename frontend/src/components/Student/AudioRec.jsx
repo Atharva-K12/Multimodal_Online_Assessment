@@ -61,6 +61,27 @@ class AudioRec extends React.Component {
       }
     }
   };
+
+  componentDidMount() {
+    const formData = new FormData();
+    formData.append('testName', this.props.testName);
+  
+    fetch('http://localhost:5000/upload-answer',{
+      method: 'POST',
+      headers: {
+        //'content-type': 'multipart/form-data',
+        'Authorization': localStorage.getItem('token')
+      },
+      body: formData
+    })
+    .then(response => response.json())
+    .then((data) => {
+      console.log('Success:', data)
+      return data.question
+    })
+    .catch(error => console.error('Error:', error))
+  }
+
   render() {
     const { isLoading, isRecording, recordings } = this.state;
     return (
