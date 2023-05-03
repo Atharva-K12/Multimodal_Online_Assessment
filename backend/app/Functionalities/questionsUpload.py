@@ -1,6 +1,5 @@
 # TODO : UPDATE this for devnew branch
 from pymongo import MongoClient
-from sentence_transformers import SentenceTransformer
 import pandas as pd
 
 
