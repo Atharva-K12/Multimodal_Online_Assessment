@@ -85,7 +85,7 @@ class AudioRec extends React.Component {
   }
 
   render() {
-    const { isLoading, isRecording, recordings } = this.state;
+    const { isLoading, isRecording, recordings, question } = this.state;
     return (
       <div>
       {isRecording ? <h2>
