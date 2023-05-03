@@ -1,7 +1,7 @@
 from flask import Blueprint, request, current_app, make_response, jsonify
 from ..Functionalities.recommendationSystem import Recommendation
 from ..Functionalities.sentenceMatch import sentence_match
-from ..Functionalities.whisper import audioToText
+from ..Functionalities.Whisper import audioToText
 from ..Functionalities.video import video_analysis
 from ..Models.test import Test
 from ..Models.enrollment import Enrollment
