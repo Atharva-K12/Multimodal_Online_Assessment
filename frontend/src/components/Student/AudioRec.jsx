@@ -36,7 +36,8 @@ class AudioRec extends React.Component {
   state = {
     isLoading: false,
     isRecording: false,
-    recordings: []
+    recordings: [],
+    question: ''
   };
   record = async () => {
     this.setState({ isLoading: true });
@@ -48,7 +49,8 @@ class AudioRec extends React.Component {
         isRecording: false,
         recordings: this.state.recordings.concat(URL.createObjectURL(blob))
       });
-      sendData(blob, this.props.testName);
+      question = sendData(blob, this.props.testName);
+      this.setState({question: question})
     } else {
       try {
         await recorder.initAudio();
@@ -77,7 +79,7 @@ class AudioRec extends React.Component {
     .then(response => response.json())
     .then((data) => {
       console.log('Success:', data)
-      return data.question
+      this.setState({question:data.question})
     })
     .catch(error => console.error('Error:', error))
   }
@@ -86,8 +88,9 @@ class AudioRec extends React.Component {
     const { isLoading, isRecording, recordings } = this.state;
     return (
       <div>
-        {/* <h2>{this.props.testName}</h2> */}
-      {/* <h4>What is constructor?</h4> */}
+      {isRecording ? <h2>
+        {this.state.question}
+      </h2>:''}
       <React.Fragment>
         <button disabled={isLoading} onClick={this.record}>
           {isRecording ? "Stop" : "Record"}
