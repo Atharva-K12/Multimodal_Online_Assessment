@@ -11,8 +11,9 @@ class Score:
         return self.collection.find_one({'student_id':student_id, 'test_id':test_id})['total_score']
     
     def add_score(self, student_id, test_id, question_number, score):
-        if question_number == 0:
-            return self.collection.insert_one({'student_id':student_id, 'test_id':test_id, 'total_score':score, 'score_list':[score], 'negative_score':0})
+        print(question_number)
+        if int(question_number) == 1:
+            ret = self.collection.insert_one({'student_id':student_id, 'test_id':test_id, 'total_score':score, 'score_list':[score], 'negative_score':0})
         else:
             data = self.collection.find_one({'student_id':student_id, 'test_id':test_id})
             data['total_score'] += score

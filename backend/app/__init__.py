@@ -11,5 +11,6 @@ def Create_app(config):
     app.register_blueprint(login)
     app.register_blueprint(student)
     app.register_blueprint(teacher)
+    print(app.config['SECRET_KEY'])
     return app
 

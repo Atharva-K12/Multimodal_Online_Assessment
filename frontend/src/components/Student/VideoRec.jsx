@@ -14,7 +14,7 @@ function VideoRec(props) {
 		formData.append('file', videoFile);
     formData.append('testName', props.testName);
     console.log(formData.get('testName'), formData.get('file'))
-    fetch('http://localhost:5000/video-upload', {
+    fetch('http://localhost:5010/video-upload', {
       method: 'POST',
       headers: {
         //'content-type': 'multipart/form-data',
@@ -40,6 +40,7 @@ function VideoRec(props) {
         mimeType="video/webm;codecs=vp8,opus"
         onStartRecording={() => {
           // call API for question
+          localStorage.setItem('questionNumber',1);
           setIsRecVideo(true);
           console.log('started recording')
         }}

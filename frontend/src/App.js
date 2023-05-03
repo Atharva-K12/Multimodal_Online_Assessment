@@ -18,7 +18,7 @@ import {
 } from "./components";
 
 export default function App() {
-  const location = 'http://127.0.0.1:5000'
+  const location = 'http://127.0.0.1:5010'
   const [testName, setTestName] = useState('')
 
   return (

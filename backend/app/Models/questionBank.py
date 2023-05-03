@@ -14,4 +14,4 @@ class QuestionBank:
         return self.collection.find({'_id':que_id})
 
     def get_question(self, question):
-        return self.collection.find({'question':question})
+        return self.collection.find_one({'question':question})['answer']

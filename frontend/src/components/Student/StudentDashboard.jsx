@@ -10,7 +10,7 @@ function StudentDashboard(props) {
     const [testlist, setTestlist] = useState({})
 
     useEffect(() => {
-        fetch('http://localhost:5000/get-student-enrollments', {
+        fetch('http://localhost:5010/get-student-enrollments', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
