@@ -5,6 +5,8 @@ import AudioRec from './AudioRec';
 
 function VideoRec(props) {
 
+  const [isRecVideo, setIsRecVideo] = React.useState(false);
+
   const submitVideo = (videoFile) => {
     // console.log(videoFile)
     // console.log(props.testName)
@@ -31,13 +33,14 @@ function VideoRec(props) {
     <div style={{ width: "100%", maxWidth: 1000, height: 500 , margin: "auto"}}>
       <h1 style={{textAlign: 'center'}}>Test Window</h1>
       <h2>{props.testName}</h2>
-      <AudioRec testName = {props.testName}/>
+      <AudioRec testName = {props.testName} isRecVideo={isRecVideo}/>
       <VideoRecorder 
         isFlipped={false}
         countdownTime={0}
         mimeType="video/webm;codecs=vp8,opus"
         onStartRecording={() => {
           // call API for question
+          setIsRecVideo(true);
           console.log('started recording')
         }}
         constraints={{
@@ -54,7 +57,8 @@ function VideoRec(props) {
           const videoFile = new File([videoBlob], "video.mp4", {
             type: "video/mp4"
           });
-          submitVideo(videoFile);        
+          submitVideo(videoFile);  
+          setIsRecVideo(false);      
         }}
       />  
     </div>

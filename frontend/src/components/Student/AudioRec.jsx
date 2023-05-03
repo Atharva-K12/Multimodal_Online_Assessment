@@ -15,8 +15,6 @@ const sendData = (audioBlob, testName, questionNumber) => {
   formData.append('file', audioFile);
   formData.append('testName', testName);
   formData.append('questionNumber', questionNumber);
-  formData.append('question', 'What is constructor?');
-  formData.append('question_number', 1);
   fetch(url, {
     method: 'POST',
     headers: {
@@ -100,7 +98,7 @@ class AudioRec extends React.Component {
         {this.state.question}
       </h2>:''}
       <React.Fragment>
-        <button disabled={isLoading} onClick={this.record}>
+        <button disabled={!this.props.isRecVideo} onClick={this.record}>
           {isRecording ? "Stop" : "Record"}
         </button>
         <ul style={{ listStyle: "none", padding: 0 }}>
