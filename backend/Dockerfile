@@ -30,6 +30,7 @@ RUN pip install dlib
 RUN pip install pymongo
 RUN pip install bcrypt
 RUN pip install pyjwt
-
+RUN pip install git+https://github.com/hukkelas/DSFD-Pytorch-Inference.git
+RUN pip install mediapipe
 # add app
 COPY . .
