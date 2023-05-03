@@ -69,17 +69,17 @@ def recommend(username):
         if not Enrollment().check_enrollment(student_id, test_id):
             return make_response(jsonify({'message': 'You are not enrolled in this test'}), 401)  
         question = Recommendation().recommend(student_id, test_id, None, None)  
-        return make_response(jsonify({'question': question['question'], 'question_number': 1}),200)
+        return make_response(jsonify({'question': question['question'], 'questionNumber': 1}),200)
 
 
 def recommendQue(student_id, test_id, queue, question, answer):
     queue.put(Recommendation().recommend(student_id, test_id, question, answer))
 
 
-def audioAnalysis(student_id, test_id, question, question_number, candidate_answer):
+def audioAnalysis(student_id, test_id, question, questionNumber, candidate_answer):
     modalQuestion = QuestionBank().get_question(question)
     sentence_cosine_score = sentence_match(modalQuestion['answer'],candidate_answer)
-    Score().add_score(student_id, test_id, question, question_number, sentence_cosine_score)
+    Score().add_score(student_id, test_id, question, questionNumber, sentence_cosine_score)
 
 
 @student.route('/upload-answer', methods=['POST'])
@@ -93,7 +93,7 @@ def upload_answer(username):
             if not Enrollment().check_enrollment(student_id, test_id):
                 return make_response(jsonify({'message': 'You are not enrolled in this test'}), 401)  
             question = Recommendation().recommend(student_id, test_id, None, None)  
-            return make_response(jsonify({'question': question['question'], 'question_number': 1}),200)
+            return make_response(jsonify({'question': question['question'], 'questionNumber': 1}),200)
         file = request.files['file']
         if file:
             data = request.form
@@ -101,19 +101,19 @@ def upload_answer(username):
             test_id = Test().get_test_id(data['testName'])
             if not Enrollment().check_enrollment(student_id, test_id):
                 return make_response(jsonify({'message': 'You are not enrolled in this test'}), 401)
-            filename = username + '_' + data['testName'] + '_' + str(data['question_number']) + '.mp3'
+            filename = username + '_' + data['testName'] + '_' + str(data['questionNumber']) + '.mp3'
             file.save(os.path.join(current_app.config['AUDIO_FOLDER'], username ,filename))
             candidate_answer = audioToText(os.path.join(current_app.config['AUDIO_FOLDER'], username, filename))
-            audio_thread = th.Thread(target=audioAnalysis, args=(student_id, test_id, data['question'], data['question_number'], candidate_answer))
+            audio_thread = th.Thread(target=audioAnalysis, args=(student_id, test_id, data['question'], data['questionNumber'], candidate_answer))
             audio_thread.start()
-            if data['question_number'] == Test().get_max_question(Test().get_test_id(data['testName'])):
+            if data['questionNumber'] < Test().get_max_question(Test().get_test_id(data['testName'])):
                 output_queue = queue.Queue()
                 recommend_thread = th.Thread(target=recommendQue, args=(student_id, test_id, output_queue, data['question'], candidate_answer))
                 recommend_thread.start()
                 audio_thread.join()
                 recommend_thread.join()
                 nextQuestion = output_queue.get()
-                return make_response(jsonify({'question': nextQuestion['question'], 'question_number':data['question_number']+1}), 200)
+                return make_response(jsonify({'question': nextQuestion['question'], 'questionNumber':data['questionNumber']+1}), 200)
             else:
                 audio_thread.join()
                 return make_response(jsonify({'message': 'End of Test'}), 200)
