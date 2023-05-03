@@ -49,7 +49,7 @@ class AudioRec extends React.Component {
         isRecording: false,
         recordings: this.state.recordings.concat(URL.createObjectURL(blob))
       });
-      question = sendData(blob, this.props.testName);
+      let question = sendData(blob, this.props.testName);
       this.setState({question: question})
     } else {
       try {
